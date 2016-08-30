@@ -1,0 +1,48 @@
+<!doctype html>
+<!-- This page will have all the trending posts -->
+
+<html>
+<head>
+    <title>Reddit</title>
+
+</head>
+
+
+<body>
+<div>
+
+    <h1 align="center">Reddit</h1>
+
+    <div>
+
+
+
+        <p align="left">Hello {{ user.local.username }}</p>
+
+        <div align="right">
+
+            <a href="/newpost" >Submit a new post</a>
+            <br/>
+            <a href="/logout" >Logout</a>
+        </div>
+
+    </div>
+
+    <div>
+        <ul>
+
+            {{#each post}}
+                <button type="submit">Upvote</button>
+                <button type="submit">Downvote</button>
+                {{postVotes}} <br/>
+                {{postTitle}} <br/>
+                {{postText}} <br/>
+
+            {{/each}}
+
+        </ul>
+    </div>
+
+</div>
+</body>
+</html>

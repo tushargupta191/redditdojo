@@ -1,0 +1,23 @@
+ <!DOCTYPE html>
+ <html>
+     <head>
+       <title>Welcome to Reddit</title>
+
+       <style>
+       body
+               {
+                   text-align:center;
+               }
+
+       </style>
+     </head>
+  <body>
+    <div>
+      <div>
+        <h1><%= error.status %>: <%= message %></h1>
+        <pre><%= error.stack %></pre>
+        <a href="/"> Home</a>
+      </div>
+    </div>
+  </body>
+</html>
