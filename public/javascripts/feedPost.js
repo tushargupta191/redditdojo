@@ -103,7 +103,8 @@ function incrementVote(arr){
     xhttp = new XMLHttpRequest();
 
     xhttp.onload = function (){
-        checkVoteCount(arr);
+        var myArr = JSON.parse(xhttp.responseText);
+        document.getElementById("postVotes"+arr).innerHTML = myArr["postVotes"];
     }
 
     var params = "id="+arr;
@@ -120,7 +121,8 @@ function decrementVote(arr){
 
 
     xhttp.onload = function (){
-        checkVoteCount(arr);
+        var myArr = JSON.parse(xhttp.responseText);
+        document.getElementById("postVotes"+arr).innerHTML = myArr["postVotes"];
     }
 
     var params = "id="+arr;
@@ -130,21 +132,4 @@ function decrementVote(arr){
 
 }
 
-function checkVoteCount(arr){
-    var xhttp;
-    xhttp = new XMLHttpRequest();
-
-    xhttp.onreadystatechange = function() {
-
-        if(xhttp.readyState == 4 && xhttp.status == 200) {
-            var myArr = JSON.parse(xhttp.responseText);
-            document.getElementById("postVotes"+arr).innerHTML = myArr["postVotes"];
-        }
-    }
-
-    var params = "id="+arr;
-    xhttp.open("POST", "/checkVoteCount" );
-    xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-    xhttp.send(params);
-}
 

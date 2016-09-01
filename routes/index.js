@@ -55,7 +55,7 @@ router.post('/voteIncrement', function(req,res){
     mongoose.model('Post').findOne(query , function(err,post){
         post.postVotes = post.postVotes + 1;
         post.save();
-        res.json({});
+        res.json(post);
     })
 });
 
@@ -69,22 +69,8 @@ router.post('/voteDecrement', function(req,res){
     mongoose.model('Post').findOne(query , function(err,post){
         post.postVotes = post.postVotes - 1;
         post.save();
-        res.json({});
-    })
-});
-
-
-
-router.post('/checkVoteCount', function(req,res){
-
-    var postId = req.body.id;
-
-    var query = {_id : postId};
-
-    mongoose.model('Post').findOne(query, function(err, post){
         res.json(post);
-    });
-
+    })
 });
 
 
