@@ -33,7 +33,7 @@ function createDom(arr){
 
     var postVotes = document.createElement("p");
     var postVotesVal = document.createTextNode(arr["postVotes"]);
-    postVotes.setAttribute("id","postVotes");
+    postVotes.setAttribute("id","postVotes" + arr["_id"]);
     postVotes.appendChild(postVotesVal);
 
     var buttonUp = document.createElement("button");
@@ -102,30 +102,13 @@ function incrementVote(arr){
     var xhttp;
     xhttp = new XMLHttpRequest();
 
-//
-//    xhttp.onreadystatechange = function() {
-//       // if(xhttp.readyState == 4 && xhttp.status == 200) {
-//            document.getElementById("a").innerHTML = "abc";//xhttp.readyState;//"end";
-//            checkVoteCount(arr);
-//        //}
-//    }
-
-//    xhttp.addEventListener('onload', function(){
-//        document.getElementById("a").innerHTML = "abs";
-//        //checkVoteCount(arr);
-//    });
-
-//    xhttp.onload = function (){
-//        document.getElementById("a").innerHTML = "abs";
-//    }
-
-
+    xhttp.onload = function (){
+        checkVoteCount(arr);
+    }
 
     var params = "id="+arr;
-
     xhttp.open("POST", "/voteIncrement");
     xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-
     xhttp.send(params);
 
 }
@@ -136,15 +119,13 @@ function decrementVote(arr){
 
 
 
-//    xhttp.onreadystatechange = function() {
-//            checkVoteCount(arr);
-//    }
+    xhttp.onload = function (){
+        checkVoteCount(arr);
+    }
 
     var params = "id="+arr;
-
     xhttp.open("POST", "/voteDecrement");
     xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-
     xhttp.send(params);
 
 }
@@ -153,23 +134,17 @@ function checkVoteCount(arr){
     var xhttp;
     xhttp = new XMLHttpRequest();
 
-
     xhttp.onreadystatechange = function() {
 
         if(xhttp.readyState == 4 && xhttp.status == 200) {
             var myArr = JSON.parse(xhttp.responseText);
-            document.getElementById("postVotes").innerHTML = myArr["postVotes"];
-            document.getElementById("a").innerHTML = "checkvotecount";
+            document.getElementById("postVotes"+arr).innerHTML = myArr["postVotes"];
         }
     }
 
-    xhttp.open("GET", "/checkVoteCount" );
-
-    var data = new FormData();
-    data.append('postId' , arr["_id"]);
-
-
-
-    xhttp.send(data);
+    var params = "id="+arr;
+    xhttp.open("POST", "/checkVoteCount" );
+    xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    xhttp.send(params);
 }
 
