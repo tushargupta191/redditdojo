@@ -1,0 +1,31 @@
+<!doctype html>
+<!-- This page will have all the trending posts -->
+
+<html>
+    <head>
+        <title>Reddit</title>
+    </head>
+
+    <body>
+        <div>
+            <button id="test">up</button>
+            <p id="a"></p>
+            <h1 align="center">Reddit</h1>
+            <div>
+                <p align="left">Hello <%= user.local.username %> </p>
+                <div align="right">
+                    <a href="/newpost" >Submit a new post</a>
+                    <br/>
+                    <a href="/logout" >Logout</a>
+                </div>
+            </div>
+
+            <div id="posts">
+
+            </div>
+
+        </div>
+
+        <script src="/javascripts/feedPost.js"> </script>
+    </body>
+</html>

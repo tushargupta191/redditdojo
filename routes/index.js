@@ -1,6 +1,8 @@
 var express = require('express');
 var passport = require('passport');
 var router = express.Router();
+var mongoose = require('mongoose');
+
 
 router.get('/', function(req, res, next) {
   res.render('index', { title: 'Express' });
@@ -34,6 +36,27 @@ router.post('/login', passport.authenticate('local-login', {
   failureRedirect: '/login',
   failureFlash: true,
 }));
+
+router.get('/getpost',function(req,res){
+
+
+    mongoose.model('Post').find( function(err,posts){
+        res.json(posts);
+    });
+});
+
+router.post('/voteincrement', function(req,res){
+
+    var postId = req.body.postId;
+    var userId = req.body.userId;
+
+    mongoose.model('Post').findOne({id : postId} , function (err,post){
+        post.postVotes += 1;
+        post.save();
+    });
+    res.redirect('/login');
+});
+
 
 module.exports = router;
 

@@ -96,5 +96,8 @@ app.use(function(err, req, res, next) {
   });
 });
 
+
+app.use(express.static(__dirname + '/public'));
+
 app.listen(port);
 module.exports = app;

@@ -16,14 +16,16 @@ router.post('/', function(req,res){
     // Get our form values. These rely on the "name" attributes
     var postTitle = req.body.postTitle;
     var postText = req.body.postText;
-    var postedBy = req.user.id;//<%= user.local.username %> ;
+    var postedByID = req.user.id;
+    var postedByName = req.user.local.username;
     var postVotes = 0;
     var postDate = getdate();
 
     mongoose.model('Post').create({
         "postTitle" : postTitle,
         "postText" : postText,
-        "postedBy" : postedBy,
+        "postedByID" : postedByID,
+        "postedByName" : postedByName,
         "postVotes" : postVotes,
         "postDate" : postDate
     }, function (err, doc) {
@@ -43,6 +45,8 @@ function getdate(){
     var dd = today.getDate();
     var mm = today.getMonth()+1; //January is 0!
     var yyyy = today.getFullYear();
+    var hour = today.getHours();
+    var min = today.getMinutes();
 
     if(dd<10) {
         dd='0'+dd
@@ -52,7 +56,7 @@ function getdate(){
         mm='0'+mm
     }
 
-    return mm.toString() +'/'+dd.toString()+'/'+yyyy.toString();
+    return mm.toString() +'/'+dd.toString()+'/'+yyyy.toString() + ' ' + hour.toString() + ':' + min.toString();
 }
 
 module.exports = router;
