@@ -1,20 +1,14 @@
-//document.getElementById("up").addEventListener("click", function(){
-//    var counter = document.getElementById("count").innerHTML;
-//    counter++;
-//    document.getElementById("count").innerHTML = counter;
-//});
-//
-//document.getElementById("down").addEventListener("click", function(){
-//    var counter = document.getElementById("count").innerHTML;
-//    counter--;
-//    document.getElementById("count").innerHTML = counter;
-//});
-
-//ajax call here
-
 document.addEventListener("DOMContentLoaded",function(event){
+    fetchPosts();
+
+});
+
+function fetchPosts(){
+
     var xhttp;
     xhttp = new XMLHttpRequest();
+
+    xhttp.open("GET", "/getpost" , true);
 
     xhttp.onreadystatechange = function() {
 
@@ -26,45 +20,28 @@ document.addEventListener("DOMContentLoaded",function(event){
 
     function myFunction(arr) {
 
-    for(i = 0; i < arr.length; i++) {
-
-       createDom(arr[i]);
-
-//        var postingDate = document.createTextNode(arr[i]["postDate"]);
-//        postDate.appendChild(postingDate);
-
-     }
-
-//        var out = "";
-//        for(i = 0; i < arr.length; i++) {
-//            out +=  '<p id = "postVotes">' + arr[i]["postVotes"] +
-//                    '<button id="up">Upvote</button>' +
-//                    '<button id="down">Downvote</button>' +
-//                    '</p>' +
-//                    '<div>' +
-//                    '<p id = "postTitle">' + arr[i]["postTitle"] +
-//                    '</p>' +
-//                    '<div style="font-size:60%">' +
-//                    ' Posted By ' + arr[i]["postedByName"] +
-//                    ' on ' + arr[i]["postDate"]+
-//                    '</div>' +
-//                    '<p id = "postText">' + arr[i]["postText"] + '</p> </div> <hr>';
-//
-//        }
-//        document.getElementById("posts").innerHTML = out;
+        for(i = 0; i < arr.length; i++) {
+            createDom(arr[i]);
+        }
     }
 
-    xhttp.open("GET", "/getpost" , true);
-    xhttp.send();
 
-});
+    xhttp.send();
+}
 
 function createDom(arr){
 
+    var postVotes = document.createElement("p");
+    var postVotesVal = document.createTextNode(arr["postVotes"]);
+    postVotes.setAttribute("id","postVotes");
+    postVotes.appendChild(postVotesVal);
+
     var buttonUp = document.createElement("button");
+    buttonUp.setAttribute("id","up" + arr["_id"]);
     var buttonUpVal = document.createTextNode("Upvote");
     buttonUp.appendChild(buttonUpVal);
     var buttonDown = document.createElement("button");
+    buttonDown.setAttribute("id","down" + arr["_id"]);
     var buttonDownVal = document.createTextNode("Downvote");
     buttonDown.appendChild(buttonDownVal);
     var paraOfButtons = document.createElement("p");
@@ -91,9 +68,10 @@ function createDom(arr){
     var postTextInfo = document.createTextNode(arr["postText"]);
     postText.appendChild(postTextInfo);
 
-    var line = document.createElement('hr');
+    var line = document.createElement("hr");
 
     var post = document.createElement("div");
+    post.appendChild(postVotes);
     post.appendChild(paraOfButtons);
     post.appendChild(postTitle);
     post.appendChild(paraOfSubTitle);
@@ -102,51 +80,96 @@ function createDom(arr){
 
     document.getElementById("posts").appendChild(post);
 
-    buttonUp.addEventListener("click", function(event){
-        document.getElementById("a").innerHTML = "On click is working";
-    })
+
+    document.getElementById("up" + arr["_id"]).addEventListener("click" , function(event){
+
+            incrementVote(arr["_id"]);
+
+    });
+
+    document.getElementById("down" + arr["_id"]).addEventListener("click" , function(event){
+
+            decrementVote(arr["_id"]);//this.id;
+
+    });
+
 
 
 }
 
-//function incrementVote(){
-//    var xhttp;
-//    xhttp = new XMLHttpRequest();
-//
-//    xhttp.open("POST", "/voteincrement");
-//
-//    var data = new FormData();
-//    data.append('postId' , this.id);
-//    data.append('value' , 1);
-//    data.append('userId' , user.id);
-//
-//    xhttp.send(data);
-//
-//}
-//
-document.getElementById("buttonUp").addEventListener("click",function(event){
 
-    document.getElementById("a").innerHTML = "start";
+function incrementVote(arr){
+    var xhttp;
+    xhttp = new XMLHttpRequest();
+
+//
+//    xhttp.onreadystatechange = function() {
+//       // if(xhttp.readyState == 4 && xhttp.status == 200) {
+//            document.getElementById("a").innerHTML = "abc";//xhttp.readyState;//"end";
+//            checkVoteCount(arr);
+//        //}
+//    }
+
+//    xhttp.addEventListener('onload', function(){
+//        document.getElementById("a").innerHTML = "abs";
+//        //checkVoteCount(arr);
+//    });
+
+//    xhttp.onload = function (){
+//        document.getElementById("a").innerHTML = "abs";
+//    }
+
+
+
+    var params = "id="+arr;
+
+    xhttp.open("POST", "/voteIncrement");
+    xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+
+    xhttp.send(params);
+
+}
+
+function decrementVote(arr){
     var xhttp;
     xhttp = new XMLHttpRequest();
 
 
 
-//    xhhtp.onreadystatechange = function () {
-//         if (xhr.readyState == 4 && xhr.status == 200) {
-//             callback(xhr.responseText);
-//         }
-//      }
+//    xhttp.onreadystatechange = function() {
+//            checkVoteCount(arr);
+//    }
+
+    var params = "id="+arr;
+
+    xhttp.open("POST", "/voteDecrement");
+    xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+
+    xhttp.send(params);
+
+}
+
+function checkVoteCount(arr){
+    var xhttp;
+    xhttp = new XMLHttpRequest();
+
+
+    xhttp.onreadystatechange = function() {
+
+        if(xhttp.readyState == 4 && xhttp.status == 200) {
+            var myArr = JSON.parse(xhttp.responseText);
+            document.getElementById("postVotes").innerHTML = myArr["postVotes"];
+            document.getElementById("a").innerHTML = "checkvotecount";
+        }
+    }
+
+    xhttp.open("GET", "/checkVoteCount" );
 
     var data = new FormData();
-    //data.append('postId' , this.id);
-    data.append('value' , 1);
-    //data.append('userId' , user.id);
-      //  document.getElementById("a").innerHTML = "end";
+    data.append('postId' , arr["_id"]);
 
-    xhttp.open('POST', '/voteincrement' ,  true);
 
-    //xhttp.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8');
+
     xhttp.send(data);
-    document.getElementById("a").innerHTML = "end";
-});
+}
+

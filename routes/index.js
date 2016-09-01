@@ -45,16 +45,44 @@ router.get('/getpost',function(req,res){
     });
 });
 
-router.post('/voteincrement', function(req,res){
+router.post('/voteIncrement', function(req,res){
+
+    var postId = req.body.id;
+    //var userId = req.body.userId;
+
+    var query = { _id : postId};
+
+    mongoose.model('Post').findOne(query , function(err,post){
+        post.postVotes = post.postVotes + 1;
+        post.save();
+        res.status(200);
+    })
+});
+
+router.post('/voteDecrement', function(req,res){
+
+    var postId = req.body.id;
+    //var userId = req.body.userId;
+
+    var query = { _id : postId};
+
+    mongoose.model('Post').findOne(query , function(err,post){
+        post.postVotes = post.postVotes - 1;
+        post.save();
+        res.status(200);
+    })
+});
+
+
+
+router.get('/checkVoteCount', function(req,res){
 
     var postId = req.body.postId;
-    var userId = req.body.userId;
 
-    mongoose.model('Post').findOne({id : postId} , function (err,post){
-        post.postVotes += 1;
-        post.save();
+    mongoose.model('Post').findOne({id: postId} , function(err, post){
+        res.json(post);
     });
-    res.redirect('/login');
+
 });
 
 
