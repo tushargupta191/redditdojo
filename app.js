@@ -20,7 +20,8 @@ var session = require('express-session');
 var db = require('./models/db');
 
 require("./models/post");
-require("./models/user")
+require("./models/user");
+require("./models/comment");
 
 
 var app = express();

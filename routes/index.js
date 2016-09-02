@@ -73,8 +73,67 @@ router.post('/voteDecrement', function(req,res){
     })
 });
 
+router.post('/getComments', function(req, res){
+
+    var postId = req.body.id;
+
+    var query = {'commentedOnPost' : postId};     //check if quotes required
+
+    mongoose.model('Comment').find(query, function(err,comments){
+        res.json(comments);
+    });
+});
+
+
+
+router.post('/postComment', function(req, res){
+
+    var commentedOnPost = req.body.commentedOn;
+    var commentText = req.body.commentedText;
+    var commentedByID = req.body.commentedBy;
+    var commentedByName = req.body.commentedByName;
+    var commentVotes = 0;
+    var commentDate = getdate();
+
+
+    mongoose.model('Comment').create({
+        "commentedOnPost" : commentedOnPost,
+        "commentText"  : commentText,
+        "commentedByID"  : commentedByID,
+        "commentedByName" : commentedByName,
+        "commentVotes" : commentVotes,
+        "commentDate"  : commentDate
+    },function (err, doc) {
+        if (err) {
+          // If it failed, return error
+            res.send("There was a problem adding the information to the database.");
+        }
+        else {
+            res.json("");
+        }
+    });
+});
 
 module.exports = router;
+
+function getdate(){
+    var today = new Date();
+    var dd = today.getDate();
+    var mm = today.getMonth()+1; //January is 0!
+    var yyyy = today.getFullYear();
+    var hour = today.getHours();
+    var min = today.getMinutes();
+
+    if(dd<10) {
+        dd='0'+dd
+    }
+
+    if(mm<10) {
+        mm='0'+mm
+    }
+
+    return mm.toString() +'/'+dd.toString()+'/'+yyyy.toString() + ' ' + hour.toString() + ':' + min.toString();
+}
 
 function isLoggedIn(req, res, next) {
   if (req.isAuthenticated())
