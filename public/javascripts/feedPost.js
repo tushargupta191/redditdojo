@@ -1,6 +1,5 @@
-document.addEventListener("DOMContentLoaded",function(event){
+document.addEventListener("DOMContentLoaded",function(){
     fetchPosts();
-
 });
 
 function fetchPosts(){
@@ -82,16 +81,18 @@ function createPostDom(arr){
 
     document.getElementById("posts").appendChild(post);
 
-    buttonUp.addEventListener("click" , function(event){
-            incrementVote(arr["_id"] , postVotes);
+    var userId = document.getElementById("userId").innerHTML;
+    
+    buttonUp.addEventListener("click" , function(){
+        incrementVote(arr["_id"] , postVotes);
     });
 
-    buttonDown.addEventListener("click" , function(event){
-            decrementVote(arr["_id"] , postVotes);
+    buttonDown.addEventListener("click" , function(){
+        decrementVote(arr["_id"] , postVotes);
     });
 
-    commentButton.addEventListener("click" , function(event){
-            fetchComments(arr["_id"] , postComments);
+    commentButton.addEventListener("click" , function(){
+        fetchComments(arr["_id"] , postComments);
     });
 
 }
@@ -104,7 +105,12 @@ function fetchComments(postId , postComments){
 
         if(xhttp.readyState == 4 && xhttp.status == 200) {
             var commentArr = JSON.parse(xhttp.responseText);
-            createCommentDom(commentArr , postId , postComments);
+
+            for(var i = 0; i<commentArr.length ; i++){
+                createCommentDom(commentArr[i]  , postComments);
+            }
+
+            createNewCommentView(postId, postComments);
         }
     }
     var JSONObj = { "id" : postId };
@@ -113,38 +119,7 @@ function fetchComments(postId , postComments){
     xhttp.send(JSON.stringify(JSONObj));
 }
 
-function createCommentDom(arr , postId , postComments){
-
-    for(i = 0; i<arr.length ; i++){
-        var commentArr = arr[i];
-        var commentVotes = document.createElement("p");
-        var commentVotesVal = document.createTextNode(commentArr["commentVotes"]);
-        commentVotes.setAttribute("style","display:inline");
-        commentVotes.appendChild(commentVotesVal);
-
-        var commentUp = document.createElement("button");
-        var commentUpVal = document.createTextNode("+");
-        commentUp.setAttribute("style","display:inline");
-        commentUp.appendChild(commentUpVal);
-
-        var commentDown = document.createElement("button");
-        var commentDownVal = document.createTextNode("-");
-        commentDown.setAttribute("style","display:inline");
-        commentDown.appendChild(commentDownVal);
-
-        var commentText = document.createElement("p");
-        var commentTextVal = document.createTextNode(commentArr["commentText"]);
-        commentText.setAttribute("style","display:inline");
-        commentText.appendChild(commentTextVal);
-
-        var comment = document.createElement("div");
-        comment.appendChild(commentVotes);
-        comment.appendChild(commentUp);
-        comment.appendChild(commentDown);
-        comment.appendChild(commentText);
-
-        postComments.appendChild(comment);
-    }
+function createNewCommentView(postId, postComments){
 
     var newCommentPara = document.createElement("p");
     var newComment = document.createElement("textarea");
@@ -155,12 +130,67 @@ function createCommentDom(arr , postId , postComments){
     newCommentPara.appendChild(submitButton);
     postComments.appendChild(newCommentPara);
 
-    submitButton.addEventListener("click" , function(event){
+    submitButton.addEventListener("click" , function(){
         var comText = newComment.value;
         if(comText !== "" ){
             postComment(postId , comText , postComments);
         }
     });
+}
+
+function createCommentDom(commentArr , postComments){
+
+    var commentUp = document.createElement("button");
+    var commentUpVal = document.createTextNode("+");
+    commentUp.setAttribute("style","display:inline");
+    commentUp.appendChild(commentUpVal);
+
+    var commentDown = document.createElement("button");
+    var commentDownVal = document.createTextNode("-");
+    commentDown.setAttribute("style","display:inline");
+    commentDown.appendChild(commentDownVal);
+
+    var commentedBy = document.createElement("p");
+    var space = document.createTextNode("\u00A0");
+    var commentedByVal = document.createTextNode(commentArr["commentedByName"]);
+    commentedBy.setAttribute("style","display:inline");
+    commentedBy.appendChild(space);
+    commentedBy.appendChild(commentedByVal);
+
+    var commentVotes = document.createElement("p");
+    var commentVotesVal = document.createTextNode(commentArr["commentVotes"]);
+    var space = document.createTextNode("\u00A0");
+    commentVotes.setAttribute("style","display:inline");
+    commentVotes.appendChild(commentVotesVal);
+    commentVotes.appendChild(space);
+
+    var commentText = document.createElement("p");
+    var commentTextVal = document.createTextNode(commentArr["commentText"]);
+    commentText.setAttribute("style","display:inline");
+    commentText.appendChild(commentTextVal);
+
+    var commentFirstLine = document.createElement("div");
+    commentFirstLine.appendChild(commentUp);
+    commentFirstLine.appendChild(commentDown);
+    commentFirstLine.appendChild(commentedBy);
+
+    var commentSecondLine = document.createElement("div");
+    commentSecondLine.appendChild(commentVotes);
+    commentSecondLine.appendChild(commentText);
+
+    var comments = document.createElement("div");
+    comments.appendChild(commentFirstLine);
+    comments.appendChild(commentSecondLine);
+
+    commentUp.addEventListener("click" , function(){
+        incrementCommentVote(commentArr["_id"] , commentVotes);
+    });
+
+    commentDown.addEventListener("click" , function () {
+        decrementCommentVote(commentArr["_id"] , commentVotes);
+    });
+
+    postComments.appendChild(comments);
 
 }
 
@@ -173,8 +203,41 @@ function postComment(postId , comText , postComments){
         postComments.innerHTML = "";
         fetchComments(postId , postComments);
     }
-    var JSONObj = {"commentedOn" : postId , "commentedText" : comText , "commentedBy" : "abc" , "commentedByName" : "abc"};
+    var commentedById = document.getElementById("userId").innerHTML;
+    var commentedByName = document.getElementById("username").innerHTML;
+    var JSONObj = {"commentedOn" : postId , "commentedText" : comText , "commentedBy" : commentedById , "commentedByName" : commentedByName};
     xhttp.open("POST", "/postComment");
+    xhttp.setRequestHeader("Content-type", "application/json");
+    xhttp.send(JSON.stringify(JSONObj));
+}
+
+function incrementCommentVote(commentId, commentVotes){
+    var xhttp;
+    xhttp = new XMLHttpRequest();
+    var userId = document.getElementById("userId").innerHTML;
+    xhttp.onload = function(){
+        var myArr = JSON.parse(xhttp.responseText);
+        commentVotes.innerHTML = myArr["commentVotes"];
+    }
+
+
+    var JSONObj = {"commentId" : commentId , "userId" : userId};
+    xhttp.open("POST" , "/commentVoteIncrement");
+    xhttp.setRequestHeader("Content-type", "application/json");
+    xhttp.send(JSON.stringify(JSONObj));
+}
+
+function decrementCommentVote(commentId, commentVotes){
+    var xhttp;
+    xhttp = new XMLHttpRequest();
+    var userId = document.getElementById("userId").innerHTML;
+    xhttp.onload = function(){
+        var myArr = JSON.parse(xhttp.responseText);
+        commentVotes.innerHTML = myArr["commentVotes"];
+    }
+
+    var JSONObj = {"commentId" : commentId , "userId" : userId};
+    xhttp.open("POST" , "/commentVoteDecrement");
     xhttp.setRequestHeader("Content-type", "application/json");
     xhttp.send(JSON.stringify(JSONObj));
 }
@@ -182,12 +245,13 @@ function postComment(postId , comText , postComments){
 function incrementVote(arr , postVotes){
     var xhttp;
     xhttp = new XMLHttpRequest();
+    var userId = document.getElementById("userId").innerHTML;
     xhttp.onload = function (){
         var myArr = JSON.parse(xhttp.responseText);
         postVotes.innerHTML = myArr["postVotes"];
     }
 
-    var JSONObj = { "id" : arr };
+    var JSONObj = { "id" : arr , "userId" : userId};
     xhttp.open("POST", "/voteIncrement");
     xhttp.setRequestHeader("Content-type", "application/json");
     xhttp.send(JSON.stringify(JSONObj));
@@ -197,12 +261,14 @@ function incrementVote(arr , postVotes){
 function decrementVote(arr , postVotes){
     var xhttp;
     xhttp = new XMLHttpRequest();
+    var userId = document.getElementById("userId").innerHTML;
+
     xhttp.onload = function (){
         var myArr = JSON.parse(xhttp.responseText);
         postVotes.innerHTML = myArr["postVotes"];
     }
 
-    var JSONObj = { "id" : arr };
+    var JSONObj = { "id" : arr , "userId" : userId};
     xhttp.open("POST", "/voteDecrement");
     xhttp.setRequestHeader("Content-type", "application/json");
     xhttp.send(JSON.stringify(JSONObj));

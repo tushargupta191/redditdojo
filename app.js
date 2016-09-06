@@ -22,6 +22,8 @@ var db = require('./models/db');
 require("./models/post");
 require("./models/user");
 require("./models/comment");
+require("./models/postUserVote");
+require("./models/commentUserVote");
 
 
 var app = express();
