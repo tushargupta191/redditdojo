@@ -37,13 +37,24 @@ router.post('/login', passport.authenticate('local-login', {
   failureFlash: true,
 }));
 
-router.get('/getpost',function(req,res){
+router.get('/getposts',function(req,res){
 
 
     mongoose.model('Post').find( function(err,posts){
         res.json(posts);
     });
 });
+
+router.post('/getPost', function(req,res){
+
+    var postId = req.body.postId;
+    var query = {_id : postId};
+
+    mongoose.model('Post').findOne(query, function(err,post){
+       res.json(post);
+    });
+});
+
 
 router.post('/voteIncrement', function(req,res){
 

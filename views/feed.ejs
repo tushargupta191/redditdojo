@@ -10,11 +10,17 @@
         <div>
             <p id="a"></p>
             <p id="b"></p>
+            <p id="c"></p>
             <h1 align="center">Reddit</h1>
             <div>
                 <p align="left">Hello <%= user.local.username %> </p>
-                <p hidden id="username"> <%= user.local.username%> </p>
-                <p hidden id="userId"> <%= user.id%></p>
+                <script>
+                    var username = '<%= user.local.username%>';
+                    var userId = '<%= user.id%>';
+                    localStorage.setItem("username" ,username);
+                    localStorage.setItem("userId" , userId);
+                </script>
+
                 <div align="right">
                     <a href="/newpost" >Submit a new post</a>
                     <br/>
@@ -27,7 +33,8 @@
 
         </div>
 
-        <script src="/javascripts/feedPost.js">
-        </script>
+        <script src="/javascripts/feedPost.js"></script>
+        <script src="/javascripts/PostDom.js"></script>
+        <script src="/javascripts/CommentDom.js"></script>
     </body>
 </html>
