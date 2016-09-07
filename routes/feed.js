@@ -9,13 +9,9 @@ router.get('/',isLoggedIn, function(req,res){
 
 router.get('/post=*', function(req,res){
 
-    // var postId = req.url.substring(6);
-    //
-    // var query = { _id : postId};
-    //
-    // mongoose.model('Post').findOne(query , function(err,post){
-        res.render('customizedPost.ejs');
-   // });
+
+    res.render('customizedPost.ejs');
+
 
 });
 
