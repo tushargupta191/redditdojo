@@ -4,7 +4,7 @@ var router = express.Router();
 var mongoose = require('mongoose');
 
 
-router.get('/', function(req, res, next) {
+router.get('/', isLoggedIn , function(req, res, next) {
   res.render('index');
 });
 
@@ -360,7 +360,8 @@ function getdate(){
 }
 
 function isLoggedIn(req, res, next) {
-  if (req.isAuthenticated())
-      return next();
-  res.redirect('/');
+  if (!req.isAuthenticated()) {
+        return next();
+  }
+  res.redirect('/feed');
 }

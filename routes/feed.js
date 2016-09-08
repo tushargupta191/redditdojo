@@ -7,12 +7,9 @@ router.get('/',isLoggedIn, function(req,res){
     res.render('feed.ejs', {user: req.user});
 });
 
-router.get('/post=*', function(req,res){
-
+router.get('/post=*', isLoggedIn, function(req,res){
 
     res.render('customizedPost.ejs');
-
-
 });
 
 
