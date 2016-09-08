@@ -15,19 +15,15 @@ function createCommentObj(commentArr) {
     commentDown.appendChild(commentDownVal);
 
     var commentedBy = document.createElement("p");
-    var space = document.createTextNode("\u00A0");
-    var commentedByVal = document.createTextNode(commentArr["commentedByName"]);
+    var commentedByVal = document.createTextNode(" " + commentArr["commentedByName"]);
     commentedBy.setAttribute("style","display:inline");
-    commentedBy.appendChild(space);
     commentedBy.appendChild(commentedByVal);
 
     var commentVotes = document.createElement("p");
     var commentVotesVal = document.createTextNode(commentArr["commentVotes"]);
-    var space = document.createTextNode("\u00A0");
     commentVotes.setAttribute("style","display:inline");
     commentVotes.style.padding = "0px 0px 0px 20px";
     commentVotes.appendChild(commentVotesVal);
-    commentVotes.appendChild(space);
 
     var commentText = document.createElement("p");
     var commentTextVal = document.createTextNode(commentArr["commentText"]);
@@ -48,11 +44,10 @@ function createCommentObj(commentArr) {
     var nestedCommentButtonVal = document.createTextNode("Comments");
     nestedCommentButton.appendChild(nestedCommentButtonVal);
 
-
     var nestedComments = document.createElement("p");
-
     var line = document.createElement("br");
     var comments = document.createElement("div");
+
     comments.appendChild(commentFirstLine);
     comments.appendChild(commentSecondLine);
     comments.appendChild(nestedCommentButton);
@@ -81,38 +76,13 @@ function createCommentObj(commentArr) {
     return comments;
 }
 
-function manageButtonUpColor(buttonUp , buttonDown){
-    if(buttonDown.style.backgroundColor == colorIfVoted){
-        buttonDown.style.backgroundColor = colorIfNotVoted;
-    }
-    if(buttonUp.style.backgroundColor == colorIfVoted){
-        buttonUp.style.background = colorIfNotVoted;
-    }
-    else if(buttonUp.style.backgroundColor == colorIfNotVoted){
-        buttonUp.style.background = colorIfVoted;
-    }
-}
-
-function manageButtonDownColor(buttonUp , buttonDown) {
-    if(buttonUp.style.backgroundColor == colorIfVoted){
-        buttonUp.style.backgroundColor = colorIfNotVoted;
-    }
-    if(buttonDown.style.backgroundColor == colorIfVoted){
-        buttonDown.style.background = colorIfNotVoted;
-    }
-    else if(buttonDown.style.backgroundColor == colorIfNotVoted){
-        buttonDown.style.background = colorIfVoted;
-    }
-}
-
 function checkCommentVoted(commentId , userId , buttonUp , buttonDown){
 
     var xhttp;
     xhttp = new XMLHttpRequest();
+
     xhttp.onload = function () {
-
         var voteStatus = JSON.parse(xhttp.responseText);
-
         if(voteStatus == 1){
             buttonUp.style.background = colorIfVoted;
             buttonDown.style.background = colorIfNotVoted;
@@ -125,8 +95,8 @@ function checkCommentVoted(commentId , userId , buttonUp , buttonDown){
             buttonUp.style.background = colorIfNotVoted;
             buttonDown.style.background = colorIfNotVoted;
         }
+    };
 
-    }
     var JSONObj = {"commentId" : commentId , "userId" : userId};
     xhttp.open("POST", "/checkCommentVoted");
     xhttp.setRequestHeader("Content-type", "application/json");
@@ -136,11 +106,11 @@ function checkCommentVoted(commentId , userId , buttonUp , buttonDown){
 function incrementCommentVote(commentId, commentVotes, userId){
     var xhttp;
     xhttp = new XMLHttpRequest();
+
     xhttp.onload = function(){
         var myArr = JSON.parse(xhttp.responseText);
         commentVotes.innerHTML = myArr["commentVotes"];
-    }
-
+    };
 
     var JSONObj = {"commentId" : commentId , "userId" : userId};
     xhttp.open("POST" , "/commentVoteIncrement");
@@ -151,10 +121,11 @@ function incrementCommentVote(commentId, commentVotes, userId){
 function decrementCommentVote(commentId, commentVotes, userId){
     var xhttp;
     xhttp = new XMLHttpRequest();
+
     xhttp.onload = function(){
         var myArr = JSON.parse(xhttp.responseText);
         commentVotes.innerHTML = myArr["commentVotes"];
-    }
+    };
 
     var JSONObj = {"commentId" : commentId , "userId" : userId};
     xhttp.open("POST" , "/commentVoteDecrement");
@@ -164,6 +135,7 @@ function decrementCommentVote(commentId, commentVotes, userId){
 
 
 function createReplyButton(postId, postComments){
+
     var reply = document.createElement("div");
     var replyButton = document.createElement("button");
     var replyButtonVal = document.createTextNode("Reply");
@@ -173,7 +145,6 @@ function createReplyButton(postId, postComments){
     postComments.appendChild(reply);
 
     replyButton.addEventListener("click" , function(){
-
         replyButton.disabled = true;
         createNewCommentView(postId, postComments);
     });
@@ -204,11 +175,12 @@ function postComment(postId , comText , postComments){
 
     var xhttp;
     xhttp = new XMLHttpRequest();
-    xhttp.onload = function (){
 
+    xhttp.onload = function (){
         postComments.innerHTML = "";
         fetchComments(postId , postComments);
-    }
+    };
+
     var commentedById = localStorage.getItem("userId");
     var commentedByName = localStorage.getItem("username");
     var JSONObj = {"commentedOn" : postId , "commentedText" : comText , "commentedBy" : commentedById , "commentedByName" : commentedByName};
@@ -222,17 +194,16 @@ function fetchComments(postId , postComments){
 
     var xhttp;
     xhttp = new XMLHttpRequest();
-    xhttp.onreadystatechange = function() {
 
+    xhttp.onreadystatechange = function() {
         if(xhttp.readyState == 4 && xhttp.status == 200) {
             var commentArr = JSON.parse(xhttp.responseText);
-
             for(var i = 0; i<commentArr.length ; i++){
                 createCommentDom(commentArr[i]  , postComments);
             }
             createReplyButton(postId, postComments);
         }
-    }
+    };
 
     var JSONObj = { "id" : postId };
     xhttp.open("POST", "/getComments");

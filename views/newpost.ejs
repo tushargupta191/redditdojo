@@ -1,37 +1,26 @@
 <!doctype html>
 <html>
-<head>
-    <title>Submit a new post</title>
-</head>
-<body>
-<div>
-
-<div>
-
-    <h1>Submit to Reddit</h1>
-
-    <form action="/newpost" method="post">
+    <head>
+        <title>Reddit</title>
+    </head>
+    <body>
         <div>
-            <label>Topic</label>
-            <textarea name="postTitle" rows = "2" cols = "80"></textarea>
+            <h1>Submit to Reddit</h1>
+            <form action="/newpost" method="post">
+                <div>
+                    <label>Topic</label>
+                    <textarea name="postTitle" rows = "2" cols = "80"></textarea>
+                </div>
+                <br>
+                <div>
+                    <label>Post</label>
+                    <textarea name="postText" rows = "3" cols = "80"></textarea>
+                </div>
+                <br>
+                <button type="submit">Submit</button>
+            </form>
+            <hr>
+            <a href="/feed">Cancel</a>
         </div>
-        <br>
-        <div>
-            <label>Post</label>
-            <textarea name="postText" rows = "3" cols = "80"></textarea>
-        </div>
-
-        <br>
-
-        <button type="submit">Submit</button>
-    </form>
-
-    <hr>
-
-    <a href="/feed">Cancel</a>
-
-</div>
-
-</div>
-</body>
+    </body>
 </html>

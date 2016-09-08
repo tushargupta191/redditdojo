@@ -6,7 +6,7 @@ var postSchema = mongoose.Schema({
     postedByID  : String,
     postedByName : String,
     postVotes : Number,
-    postDate  : String,
+    postDate  : String
 });
 
 module.exports = mongoose.model('Post', postSchema);

@@ -80,7 +80,6 @@ function createPostObj(arr){
     });
 
     return post;
-
 }
 
 function manageButtonUpColor(buttonUp , buttonDown){
@@ -109,13 +108,11 @@ function manageButtonDownColor(buttonUp , buttonDown) {
 
 
 function checkVoted(postId , userId , buttonUp , buttonDown){
-
     var xhttp;
     xhttp = new XMLHttpRequest();
+
     xhttp.onload = function () {
-
         var voteStatus = JSON.parse(xhttp.responseText);
-
         if(voteStatus == 1){
             buttonUp.style.background = colorIfVoted;
             buttonDown.style.background = colorIfNotVoted;
@@ -128,29 +125,27 @@ function checkVoted(postId , userId , buttonUp , buttonDown){
             buttonUp.style.background = colorIfNotVoted;
             buttonDown.style.background = colorIfNotVoted;
         }
+    };
 
-    }
     var JSONObj = {"postId" : postId , "userId" : userId};
     xhttp.open("POST", "/checkVoted");
     xhttp.setRequestHeader("Content-type", "application/json");
     xhttp.send(JSON.stringify(JSONObj));
-
-
 }
 
 function incrementVote(arr , postVotes , userId){
     var xhttp;
     xhttp = new XMLHttpRequest();
+
     xhttp.onload = function (){
         var myArr = JSON.parse(xhttp.responseText);
         postVotes.innerHTML = myArr["postVotes"];
-    }
+    };
 
     var JSONObj = { "id" : arr , "userId" : userId};
     xhttp.open("POST", "/voteIncrement");
     xhttp.setRequestHeader("Content-type", "application/json");
     xhttp.send(JSON.stringify(JSONObj));
-
 }
 
 function decrementVote(arr , postVotes , userId){
@@ -160,11 +155,10 @@ function decrementVote(arr , postVotes , userId){
     xhttp.onload = function (){
         var myArr = JSON.parse(xhttp.responseText);
         postVotes.innerHTML = myArr["postVotes"];
-    }
+    };
 
     var JSONObj = { "id" : arr , "userId" : userId};
     xhttp.open("POST", "/voteDecrement");
     xhttp.setRequestHeader("Content-type", "application/json");
     xhttp.send(JSON.stringify(JSONObj));
-
 }

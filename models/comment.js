@@ -6,7 +6,7 @@ var commentSchema = mongoose.Schema({
     commentedByID  : String,
     commentedByName : String,
     commentVotes : Number,
-    commentDate  : String,
+    commentDate  : String
 });
 
 module.exports = mongoose.model('Comment', commentSchema);

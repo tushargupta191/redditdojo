@@ -12,41 +12,34 @@ router.get('/login', function(req, res, next) {
   res.render('login.ejs', { message: req.flash('loginMessage') });
 });
 
+router.post('/login', passport.authenticate('local-login', {
+    successRedirect: '/feed',
+    failureRedirect: '/login',
+    failureFlash: true,
+}));
+
 router.get('/signup', function(req, res) {
   res.render('signup.ejs', { message: req.flash('signupMessage') });
 });
 
-//router.get('/feed', isLoggedIn, function(req, res) {
-//  res.render('feed.ejs', { user: req.user });
-//});
+router.post('/signup', passport.authenticate('local-signup', {
+    successRedirect: '/feed',
+    failureRedirect: '/signup',
+    failureFlash: true,
+}));
 
 router.get('/logout', function(req, res) {
   req.logout();
   res.redirect('/');
 });
 
-router.post('/signup', passport.authenticate('local-signup', {
-  successRedirect: '/feed',
-  failureRedirect: '/signup',
-  failureFlash: true,
-}));
-
-router.post('/login', passport.authenticate('local-login', {
-  successRedirect: '/feed',
-  failureRedirect: '/login',
-  failureFlash: true,
-}));
-
-router.get('/getposts',function(req,res){
-
-
+router.get('/getPosts',function(req,res){
     mongoose.model('Post').find( function(err,posts){
         res.json(posts);
     });
 });
 
 router.post('/getPost', function(req,res){
-
     var postId = req.body.postId;
     var query = {_id : postId};
 
@@ -55,35 +48,9 @@ router.post('/getPost', function(req,res){
     });
 });
 
-router.post('/checkCommentVoted' , function(req,res){
-
-    var commentId = req.body.commentId;
-    var userId = req.body.userId;
-
-    var query = {'commentId' : commentId , 'userId' : userId};
-
-    mongoose.model('CommentUserVote').findOne(query, function(err, result){
-
-        var val;
-        if(!result){
-            val = 0;
-        }
-        else{
-            if(result.Vote == 1){
-                val = 1;
-            }
-            else if(result.Vote == -1){
-                val = -1;
-            }
-        }
-        res.json(val);
-    });
-});
-
 router.post('/checkVoted' , function(req,res){
     var postId = req.body.postId;
     var userId = req.body.userId;
-
     var query = {'postId' : postId , 'userId' : userId};
 
     mongoose.model('PostUserVote').findOne(query, function(err, result){
@@ -104,21 +71,16 @@ router.post('/checkVoted' , function(req,res){
     });
 });
 
-
 router.post('/voteIncrement', function(req,res){
-
     var postId = req.body.id;
     var userId = req.body.userId;
-
     var query = { _id : postId};
     var incrementBy = 0;
-
     var queryUserPostDatabase = {'postId' : postId , 'userId' : userId};
 
     mongoose.model('PostUserVote').findOne(queryUserPostDatabase , function (err,result) {
 
         if(result){
-
             if(result.Vote == 1){
                 incrementBy = -1;
                 mongoose.model('PostUserVote').remove(queryUserPostDatabase , function(err){
@@ -135,13 +97,11 @@ router.post('/voteIncrement', function(req,res){
         else{
             incrementBy = 1;
             mongoose.model('PostUserVote').create({
-
                 "userId" : userId,
                 "postId" : postId,
                 "Vote" : 1
             });
         }
-
         mongoose.model('Post').findOne(query , function(err,post){
 
             post.postVotes = post.postVotes + incrementBy;
@@ -149,19 +109,14 @@ router.post('/voteIncrement', function(req,res){
             res.json(post);
         });
     });
-
-
 });
 
 router.post('/voteDecrement', function(req,res){
 
     var postId = req.body.id;
     var userId = req.body.userId;
-
     var query = { _id : postId};
-
     var queryUserPostDatabase = {'postId' : postId , 'userId' : userId};
-
     var decrementBy = 0;
 
     mongoose.model('PostUserVote').findOne(queryUserPostDatabase , function (err,result) {
@@ -182,40 +137,51 @@ router.post('/voteDecrement', function(req,res){
         else{
             decrementBy = 1;
             mongoose.model('PostUserVote').create({
-
                 "userId" : userId,
                 "postId" : postId,
                 "Vote" : -1
             });
         }
-
         mongoose.model('Post').findOne(query , function(err,post){
             post.postVotes = post.postVotes - decrementBy;
             post.save();
             res.json(post);
         });
-
-
     });
+});
 
+router.post('/checkCommentVoted' , function(req,res){
+    var commentId = req.body.commentId;
+    var userId = req.body.userId;
+    var query = {'commentId' : commentId , 'userId' : userId};
 
-
+    mongoose.model('CommentUserVote').findOne(query, function(err, result){
+        var val;
+        if(!result){
+            val = 0;
+        }
+        else{
+            if(result.Vote == 1){
+                val = 1;
+            }
+            else if(result.Vote == -1){
+                val = -1;
+            }
+        }
+        res.json(val);
+    });
 });
 
 router.post('/commentVoteIncrement' , function (req,res) {
 
     var commentId = req.body.commentId;
     var userId = req.body.userId;
-
     var query = {_id : commentId};
-
     var incrementBy = 0;
     var queryUserCommentDatabase = {'commentId' : commentId , 'userId' : userId};
 
     mongoose.model('CommentUserVote').findOne(queryUserCommentDatabase , function (err,result) {
-
         if(result){
-
             if(result.Vote == 1){
                 incrementBy = -1;
                 mongoose.model('CommentUserVote').remove(queryUserCommentDatabase , function(err){
@@ -227,20 +193,16 @@ router.post('/commentVoteIncrement' , function (req,res) {
                 result.Vote = 1;
                 result.save();
             }
-
         }
         else{
             incrementBy = 1;
             mongoose.model('CommentUserVote').create({
-
                 "userId" : userId,
                 "commentId" : commentId,
                 "Vote" : 1
             });
         }
-
         mongoose.model('Comment').findOne(query , function(err,comment){
-
             comment.commentVotes = comment.commentVotes + incrementBy;
             comment.save();
             res.json(comment);
@@ -252,15 +214,11 @@ router.post('/commentVoteDecrement', function(req,res){
 
     var commentId = req.body.commentId;
     var userId = req.body.userId;
-
     var query = { _id : commentId};
-
     var queryUserCommentDatabase = {'commentId' : commentId , 'userId' : userId};
-
     var decrementBy = 0;
 
     mongoose.model('CommentUserVote').findOne(queryUserCommentDatabase , function (err,result) {
-
         if(result){
             if(result.Vote == -1){
                 decrementBy = -1;
@@ -277,38 +235,27 @@ router.post('/commentVoteDecrement', function(req,res){
         else{
             decrementBy = 1;
             mongoose.model('CommentUserVote').create({
-
                 "userId" : userId,
                 "commentId" : commentId,
                 "Vote" : -1
             });
         }
-
         mongoose.model('Comment').findOne(query , function(err,comment){
             comment.commentVotes = comment.commentVotes - decrementBy;
             comment.save();
             res.json(comment);
         });
-
-
     });
-
-
-
 });
 
 router.post('/getComments', function(req, res){
 
     var postId = req.body.id;
-
-    var query = {'commentedOnPost' : postId};     //check if quotes required
-
+    var query = {'commentedOnPost' : postId};
     mongoose.model('Comment').find(query, function(err,comments){
         res.json(comments);
     });
 });
-
-
 
 router.post('/postComment', function(req, res){
 
@@ -319,7 +266,6 @@ router.post('/postComment', function(req, res){
     var commentVotes = 0;
     var commentDate = getdate();
 
-
     mongoose.model('Comment').create({
         "commentedOnPost" : commentedOnPost,
         "commentText"  : commentText,
@@ -329,7 +275,6 @@ router.post('/postComment', function(req, res){
         "commentDate"  : commentDate
     },function (err) {
         if (err) {
-          // If it failed, return error
             res.send("There was a problem adding the information to the database.");
         }
         else {
