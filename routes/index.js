@@ -55,6 +55,55 @@ router.post('/getPost', function(req,res){
     });
 });
 
+router.post('/checkCommentVoted' , function(req,res){
+
+    var commentId = req.body.commentId;
+    var userId = req.body.userId;
+
+    var query = {'commentId' : commentId , 'userId' : userId};
+
+    mongoose.model('CommentUserVote').findOne(query, function(err, result){
+
+        var val;
+        if(!result){
+            val = 0;
+        }
+        else{
+            if(result.Vote == 1){
+                val = 1;
+            }
+            else if(result.Vote == -1){
+                val = -1;
+            }
+        }
+        res.json(val);
+    });
+});
+
+router.post('/checkVoted' , function(req,res){
+    var postId = req.body.postId;
+    var userId = req.body.userId;
+
+    var query = {'postId' : postId , 'userId' : userId};
+
+    mongoose.model('PostUserVote').findOne(query, function(err, result){
+
+        var val;
+        if(!result){
+            val = 0;
+        }
+        else{
+            if(result.Vote == 1){
+                val = 1;
+            }
+            else if(result.Vote == -1){
+                val = -1;
+            }
+        }
+        res.json(val);
+    });
+});
+
 
 router.post('/voteIncrement', function(req,res){
 

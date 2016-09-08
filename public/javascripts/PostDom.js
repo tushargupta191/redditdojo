@@ -1,4 +1,10 @@
+var colorIfVoted = "rgb(255, 153, 51)";
+var colorIfNotVoted = "rgb(254, 254, 254)";
+
 function createPostObj(arr){
+
+    var userId = localStorage.getItem("userId");
+
     var postVotes = document.createElement("p");
     var postVotesVal = document.createTextNode(arr["postVotes"] + "  ");
     postVotes.setAttribute("style","display:inline");
@@ -52,24 +58,24 @@ function createPostObj(arr){
     post.appendChild(postComments);
     post.appendChild(line);
 
-    var userId = localStorage.getItem("userId");
+    checkVoted(arr["_id"] , userId , buttonUp , buttonDown);
 
     buttonUp.addEventListener("click" , function(){
-        incrementVote(arr["_id"] , postVotes);
+        manageButtonUpColor(buttonUp , buttonDown);
+        incrementVote(arr["_id"] , postVotes , userId);
     });
 
     buttonDown.addEventListener("click" , function(){
-        decrementVote(arr["_id"] , postVotes);
+        manageButtonDownColor(buttonUp , buttonDown);
+        decrementVote(arr["_id"] , postVotes , userId);
     });
 
     commentButton.addEventListener("click" , function(){
         commentButton.disabled = true;
         fetchComments(arr["_id"] , postComments);
-
     });
 
     postTitle.addEventListener("click" , function(){
-        //redirect to a new page
         window.location = '/feed/post=' + arr["_id"];
     });
 
@@ -77,10 +83,64 @@ function createPostObj(arr){
 
 }
 
-function incrementVote(arr , postVotes){
+function manageButtonUpColor(buttonUp , buttonDown){
+    if(buttonDown.style.backgroundColor == colorIfVoted){
+        buttonDown.style.backgroundColor = colorIfNotVoted;
+    }
+    if(buttonUp.style.backgroundColor == colorIfVoted){
+        buttonUp.style.background = colorIfNotVoted;
+    }
+    else if(buttonUp.style.backgroundColor == colorIfNotVoted){
+        buttonUp.style.background = colorIfVoted;
+    }
+}
+
+function manageButtonDownColor(buttonUp , buttonDown) {
+    if(buttonUp.style.backgroundColor == colorIfVoted){
+        buttonUp.style.backgroundColor = colorIfNotVoted;
+    }
+    if(buttonDown.style.backgroundColor == colorIfVoted){
+        buttonDown.style.background = colorIfNotVoted;
+    }
+    else if(buttonDown.style.backgroundColor == colorIfNotVoted){
+        buttonDown.style.background = colorIfVoted;
+    }
+}
+
+
+function checkVoted(postId , userId , buttonUp , buttonDown){
+
     var xhttp;
     xhttp = new XMLHttpRequest();
-    var userId = localStorage.getItem("userId");
+    xhttp.onload = function () {
+
+        var voteStatus = JSON.parse(xhttp.responseText);
+
+        if(voteStatus == 1){
+            buttonUp.style.background = colorIfVoted;
+            buttonDown.style.background = colorIfNotVoted;
+        }
+        else if(voteStatus == -1){
+            buttonDown.style.background = colorIfVoted;
+            buttonUp.style.background = colorIfNotVoted;
+        }
+        else if(voteStatus == 0){
+            buttonUp.style.background = colorIfNotVoted;
+            buttonDown.style.background = colorIfNotVoted;
+        }
+
+    }
+    var JSONObj = {"postId" : postId , "userId" : userId};
+    xhttp.open("POST", "/checkVoted");
+    xhttp.setRequestHeader("Content-type", "application/json");
+    xhttp.send(JSON.stringify(JSONObj));
+
+
+}
+
+function incrementVote(arr , postVotes , userId){
+    var xhttp;
+    xhttp = new XMLHttpRequest();
     xhttp.onload = function (){
         var myArr = JSON.parse(xhttp.responseText);
         postVotes.innerHTML = myArr["postVotes"];
@@ -93,10 +153,9 @@ function incrementVote(arr , postVotes){
 
 }
 
-function decrementVote(arr , postVotes){
+function decrementVote(arr , postVotes , userId){
     var xhttp;
     xhttp = new XMLHttpRequest();
-    var userId = localStorage.getItem("userId");
 
     xhttp.onload = function (){
         var myArr = JSON.parse(xhttp.responseText);

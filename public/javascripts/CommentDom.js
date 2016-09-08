@@ -1,4 +1,9 @@
+var colorIfVoted = "rgb(255, 153, 51)";
+var colorIfNotVoted = "rgb(254, 254, 254)";
+
 function createCommentObj(commentArr) {
+    var userId = localStorage.getItem("userId");
+
     var commentUp = document.createElement("button");
     var commentUpVal = document.createTextNode("+");
     commentUp.setAttribute("style","display:inline");
@@ -55,12 +60,16 @@ function createCommentObj(commentArr) {
     comments.appendChild(line);
     comments.style.padding = "0px 0px 0px 20px";
 
+    checkCommentVoted(commentArr["_id"] , userId , commentUp , commentDown);
+
     commentUp.addEventListener("click" , function(){
-        incrementCommentVote(commentArr["_id"] , commentVotes);
+        manageButtonUpColor(commentUp, commentDown);
+        incrementCommentVote(commentArr["_id"] , commentVotes , userId);
     });
 
     commentDown.addEventListener("click" , function () {
-        decrementCommentVote(commentArr["_id"] , commentVotes);
+        manageButtonDownColor(commentUp, commentDown);
+        decrementCommentVote(commentArr["_id"] , commentVotes , userId);
     });
 
     nestedCommentButton.addEventListener("click" , function(){
@@ -72,10 +81,61 @@ function createCommentObj(commentArr) {
     return comments;
 }
 
-function incrementCommentVote(commentId, commentVotes){
+function manageButtonUpColor(buttonUp , buttonDown){
+    if(buttonDown.style.backgroundColor == colorIfVoted){
+        buttonDown.style.backgroundColor = colorIfNotVoted;
+    }
+    if(buttonUp.style.backgroundColor == colorIfVoted){
+        buttonUp.style.background = colorIfNotVoted;
+    }
+    else if(buttonUp.style.backgroundColor == colorIfNotVoted){
+        buttonUp.style.background = colorIfVoted;
+    }
+}
+
+function manageButtonDownColor(buttonUp , buttonDown) {
+    if(buttonUp.style.backgroundColor == colorIfVoted){
+        buttonUp.style.backgroundColor = colorIfNotVoted;
+    }
+    if(buttonDown.style.backgroundColor == colorIfVoted){
+        buttonDown.style.background = colorIfNotVoted;
+    }
+    else if(buttonDown.style.backgroundColor == colorIfNotVoted){
+        buttonDown.style.background = colorIfVoted;
+    }
+}
+
+function checkCommentVoted(commentId , userId , buttonUp , buttonDown){
+
     var xhttp;
     xhttp = new XMLHttpRequest();
-    var userId = localStorage.getItem("userId");
+    xhttp.onload = function () {
+
+        var voteStatus = JSON.parse(xhttp.responseText);
+
+        if(voteStatus == 1){
+            buttonUp.style.background = colorIfVoted;
+            buttonDown.style.background = colorIfNotVoted;
+        }
+        else if(voteStatus == -1){
+            buttonDown.style.background = colorIfVoted;
+            buttonUp.style.background = colorIfNotVoted;
+        }
+        else if(voteStatus == 0){
+            buttonUp.style.background = colorIfNotVoted;
+            buttonDown.style.background = colorIfNotVoted;
+        }
+
+    }
+    var JSONObj = {"commentId" : commentId , "userId" : userId};
+    xhttp.open("POST", "/checkCommentVoted");
+    xhttp.setRequestHeader("Content-type", "application/json");
+    xhttp.send(JSON.stringify(JSONObj));
+}
+
+function incrementCommentVote(commentId, commentVotes, userId){
+    var xhttp;
+    xhttp = new XMLHttpRequest();
     xhttp.onload = function(){
         var myArr = JSON.parse(xhttp.responseText);
         commentVotes.innerHTML = myArr["commentVotes"];
@@ -88,10 +148,9 @@ function incrementCommentVote(commentId, commentVotes){
     xhttp.send(JSON.stringify(JSONObj));
 }
 
-function decrementCommentVote(commentId, commentVotes){
+function decrementCommentVote(commentId, commentVotes, userId){
     var xhttp;
     xhttp = new XMLHttpRequest();
-    var userId = localStorage.getItem("userId");
     xhttp.onload = function(){
         var myArr = JSON.parse(xhttp.responseText);
         commentVotes.innerHTML = myArr["commentVotes"];
