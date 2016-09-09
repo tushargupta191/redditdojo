@@ -2,7 +2,7 @@ var express = require('express');
 var router = express.Router();
 var mongoose = require('mongoose');
 
-router.get('/', function(req,res){
+router.get('/', isLoggedIn , function(req,res){
     res.render('newpost.ejs', { user: req.user });
 });
 
@@ -47,6 +47,12 @@ function getDate(){
         mm='0'+mm
     }
     return mm.toString() +'/'+dd.toString()+'/'+yyyy.toString() + ' ' + hour.toString() + ':' + min.toString();
+}
+
+function isLoggedIn(req, res, next) {
+    if (req.isAuthenticated())
+        return next();
+    res.redirect('/');
 }
 
 module.exports = router;

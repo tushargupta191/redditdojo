@@ -2,8 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="db53cc4f-2259-48f5-b981-3f94925ce85e" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/routes/index.js" afterPath="$PROJECT_DIR$/routes/index.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/routes/newpost.js" afterPath="$PROJECT_DIR$/routes/newpost.js" />
     </list>
     <ignored path="reddit.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -68,20 +67,30 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="newpost.js" pinned="false" current-in-tab="false">
+      <file leaf-file-name="newpost.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/routes/newpost.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="705">
-              <caret line="47" column="5" selection-start-line="47" selection-start-column="5" selection-end-line="47" selection-end-column="5" />
+            <state relative-caret-position="315">
+              <caret line="21" column="38" selection-start-line="21" selection-start-column="38" selection-end-line="21" selection-end-column="38" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="index.js" pinned="false" current-in-tab="true">
+      <file leaf-file-name="feed.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/routes/feed.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="195">
+              <caret line="13" column="0" selection-start-line="13" selection-start-column="0" selection-end-line="17" selection-end-column="1" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="index.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/routes/index.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="540">
+            <state relative-caret-position="3840">
               <caret line="256" column="25" selection-start-line="256" selection-start-column="25" selection-end-line="256" selection-end-column="25" />
               <folding />
             </state>
@@ -162,7 +171,6 @@
         <option value="$PROJECT_DIR$/models/db.js" />
         <option value="$PROJECT_DIR$/views/check.html" />
         <option value="$PROJECT_DIR$/routes/feed.js" />
-        <option value="$PROJECT_DIR$/routes/newpost.js" />
         <option value="$PROJECT_DIR$/public/javascripts/getPost.js" />
         <option value="$PROJECT_DIR$/models/comment.js" />
         <option value="$PROJECT_DIR$/models/commentUserVote.js" />
@@ -181,6 +189,7 @@
         <option value="$PROJECT_DIR$/views/newpost.ejs" />
         <option value="$PROJECT_DIR$/views/customizedPost.ejs" />
         <option value="$PROJECT_DIR$/routes/index.js" />
+        <option value="$PROJECT_DIR$/routes/newpost.js" />
       </list>
     </option>
   </component>
@@ -449,12 +458,12 @@
       <workItem from="1473145290997" duration="24593000" />
       <workItem from="1473232510652" duration="20731000" />
       <workItem from="1473319231859" duration="13833000" />
-      <workItem from="1473412709226" duration="11791000" />
+      <workItem from="1473412709226" duration="11934000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="70948000" />
+    <option name="totallyTimeSpent" value="71091000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="1280" y="0" width="1680" height="1050" extended-state="0" />
@@ -637,13 +646,6 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/views/cehck.html" />
     <entry file="file://$PROJECT_DIR$/views/check.html" />
-    <entry file="file://$PROJECT_DIR$/routes/feed.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="150">
-          <caret line="10" column="0" selection-start-line="10" selection-start-column="0" selection-end-line="10" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/models/postUserVote.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="120">
@@ -807,14 +809,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/routes/newpost.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="705">
-          <caret line="47" column="5" selection-start-line="47" selection-start-column="5" selection-end-line="47" selection-end-column="5" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/models/post.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="105">
@@ -839,10 +833,26 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/routes/feed.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="195">
+          <caret line="13" column="0" selection-start-line="13" selection-start-column="0" selection-end-line="17" selection-end-column="1" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/routes/index.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="540">
+        <state relative-caret-position="3840">
           <caret line="256" column="25" selection-start-line="256" selection-start-column="25" selection-end-line="256" selection-end-column="25" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/routes/newpost.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="315">
+          <caret line="21" column="38" selection-start-line="21" selection-start-column="38" selection-end-line="21" selection-end-column="38" />
           <folding />
         </state>
       </provider>
