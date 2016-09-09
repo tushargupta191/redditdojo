@@ -1,23 +1,28 @@
 <!doctype html>
 <html>
     <head>
+        <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css">
         <title>Reddit</title>
     </head>
     <body>
-        <div>
-            <h1>Submit to Reddit</h1>
+        <div class="col-md-4" style = "text-align:center; margin-top: 125px" >
+            <img src="/images/logo2.png" >
+        </div>
+
+        <div class="col-md-4">
+            <h1>What's New</h1>
             <form action="/newpost" method="post">
-                <div>
+                <div class="form-group">
                     <label>Topic</label>
-                    <textarea name="postTitle" rows = "2" cols = "80"></textarea>
+                    <textarea name="postTitle" rows = "2" cols = "80" class="form-control"></textarea>
                 </div>
                 <br>
-                <div>
+                <div class="form-group">
                     <label>Post</label>
-                    <textarea name="postText" rows = "3" cols = "80"></textarea>
+                    <textarea name="postText" rows = "3" cols = "80" class="form-control"></textarea>
                 </div>
                 <br>
-                <button type="submit">Submit</button>
+                <button type="submit" class="btn btn-primary btn-lg">Submit</button>
             </form>
             <hr>
             <a href="/feed">Cancel</a>

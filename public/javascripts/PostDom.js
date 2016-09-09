@@ -12,9 +12,11 @@ function createPostObj(arr){
 
     var buttonUp = document.createElement("button");
     var buttonUpVal = document.createTextNode("Upvote");
+    buttonUp.className = "btn btn-default btn-xs";
     buttonUp.appendChild(buttonUpVal);
     var buttonDown = document.createElement("button");
     var buttonDownVal = document.createTextNode("Downvote");
+    buttonDown.className = "btn btn-default btn-xs";
     buttonDown.appendChild(buttonDownVal);
     var paraOfButtons = document.createElement("p");
     paraOfButtons.setAttribute("style","display:inline");
@@ -23,6 +25,8 @@ function createPostObj(arr){
 
     var postTitle = document.createElement("p");
     var postTitleText  =document.createTextNode(arr["postTitle"]);
+    postTitle.style.margin = "0px";
+    postTitle.style.marginTop = "5px";
     postTitle.appendChild(postTitleText);
 
     var paraOfSubTitle = document.createElement("p");
@@ -34,14 +38,18 @@ function createPostObj(arr){
     paraOfSubTitle.appendChild(postedByName);
     paraOfSubTitle.appendChild(postedOn);
     paraOfSubTitle.appendChild(postedOnDate);
-    paraOfSubTitle.setAttribute("style","font-size:60%");
+    paraOfSubTitle.setAttribute("style","font-size:70%");
+    paraOfSubTitle.style.margin = "0px";
 
     var postText = document.createElement("p");
     var postTextInfo = document.createTextNode(arr["postText"]);
     postText.appendChild(postTextInfo);
+    postText.style.margin = "0px";
 
     var commentButton = document.createElement("button");
     var comment = document.createTextNode("Comments");
+    commentButton.className = "btn btn-default btn-xs";
+    commentButton.style.marginTop = "5px";
     //commentButton.setAttribute("style","color:#6698FF ; font-size:80%");
     commentButton.appendChild(comment);
 

@@ -1,29 +1,34 @@
 <!doctype html>
 <html>
     <head>
+        <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css">
         <title>Reddit</title>
     </head>
     <body>
-        <div>
+        <div class="col-md-4" style = "text-align:center; margin-top: 125px" >
+                <img src="/images/logo2.png" >
+        </div>
+
+        <div class="col-md-4">
             <h1>Login</h1>
             <% if (message.length > 0) { %>
-            <div><%= message %></div>
+            <div class="alert alert-danger"><%= message %></div>
             <% } %>
 
             <form action="/login" method="post">
-                <div>
+                <div class="form-group">
                     <label>Username</label>
-                    <input type="text" name="username">
+                    <input type="text" class="form-control" name="username">
                 </div>
-                <div>
+                <div class="form-group">
                     <label>Password</label>
-                    <input type="password" name="password">
+                    <input type="password" class="form-control" name="password">
                 </div>
-                <button type="submit">Login</button>
+                <button type="submit" class="btn btn-primary btn-lg">Login</button>
             </form>
             <hr>
             <p>Need an account? <a href="/signup">Signup</a></p>
-            <p>Or go <a href="/">home</a>.</p>
+            <p>Or go <a href="/">home.</a></p>
         </div>
     </body>
 </html>

@@ -3,12 +3,16 @@
 <html>
     <head>
         <title>Reddit</title>
+        <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     </head>
-    <body>
-        <div>
-            <h1 align="center">Reddit</h1>
+    <body style = "font-family:Times New Roman; margin: 10px" >
+        <div class="col-md-12">
+            <div align="center">
+                <img src="/images/logo2.png">
+            </div>
+
             <div>
-                <p align="left">Hello <%= user.local.username %> </p>
+                <p style = "font-size : 120%" align="left">Hello <%= user.local.username %> </p>
 
                 <script>
                     var username = '<%= user.local.username%>';
@@ -17,9 +21,10 @@
                     localStorage.setItem("userId" , userId);
                 </script>
                 <div align="right">
-                    <a href="/newpost" >Submit a new post</a>
+                    <a href="/newpost" class="btn btn-primary btn-sm" style="font-size: 100%" >Submit a new post</a>
                     <br/>
-                    <a href="/logout" >Logout</a>
+                    <a href="/logout" class="btn btn-primary btn-sm" style="font-size: 100%">Logout </a>
+                    <br/>
                 </div>
             </div>
             <div id="posts"></div>

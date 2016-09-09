@@ -7,11 +7,13 @@ function createCommentObj(commentArr) {
     var commentUp = document.createElement("button");
     var commentUpVal = document.createTextNode("+");
     commentUp.setAttribute("style","display:inline");
+    commentUp.className = "btn btn-default btn-xs";
     commentUp.appendChild(commentUpVal);
 
     var commentDown = document.createElement("button");
     var commentDownVal = document.createTextNode("-");
     commentDown.setAttribute("style","display:inline");
+    commentDown.className = "btn btn-default btn-xs";
     commentDown.appendChild(commentDownVal);
 
     var commentedBy = document.createElement("p");
@@ -42,6 +44,7 @@ function createCommentObj(commentArr) {
 
     var nestedCommentButton = document.createElement("button");
     var nestedCommentButtonVal = document.createTextNode("Comments");
+    nestedCommentButton.className = "btn btn-default btn-xs";
     nestedCommentButton.appendChild(nestedCommentButtonVal);
 
     var nestedComments = document.createElement("p");
@@ -139,6 +142,7 @@ function createReplyButton(postId, postComments){
     var reply = document.createElement("div");
     var replyButton = document.createElement("button");
     var replyButtonVal = document.createTextNode("Reply");
+    replyButton.className = "btn btn-default btn-xs";
     replyButton.appendChild(replyButtonVal);
     reply.appendChild(replyButton);
     reply.style.padding = "0px 0px 0px 20px";
@@ -156,6 +160,7 @@ function createNewCommentView(postId, postComments){
     var newComment = document.createElement("textarea");
     var submitButton = document.createElement("button");
     var submitButtonVal = document.createTextNode("submit");
+    submitButton.className = "btn btn-default btn-xs";
     submitButton.appendChild(submitButtonVal);
     newCommentPara.appendChild(newComment);
     newCommentPara.appendChild(submitButton);
