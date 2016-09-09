@@ -36,7 +36,7 @@ router.get('/logout', function(req, res) {
 router.get('/getPosts',function(req,res){
     mongoose.model('Post').find( function(err,posts){
         res.json(posts);
-    });
+    }).sort({postVotes: -1});
 });
 
 router.post('/getPost', function(req,res){
@@ -254,7 +254,7 @@ router.post('/getComments', function(req, res){
     var query = {'commentedOnPost' : postId};
     mongoose.model('Comment').find(query, function(err,comments){
         res.json(comments);
-    });
+    }).sort({commentVotes: -1});
 });
 
 router.post('/postComment', function(req, res){
