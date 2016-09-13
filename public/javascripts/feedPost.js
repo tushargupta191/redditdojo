@@ -17,16 +17,12 @@ function fetchPosts(){
 
     function myFunction(arr) {
         for(var i = 0; i < arr.length; i++) {
-            createPostDom(arr[i]);
+            var newPost = new Post(arr[i]);
+            document.getElementById("posts").appendChild(newPost.populateDom());
         }
     }
 
     xhttp.send();
 }
 
-
-function createPostDom(arr){
-    var newPost = createPostObj(arr);
-    document.getElementById("posts").appendChild(newPost);
-}
 
