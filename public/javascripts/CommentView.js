@@ -1,38 +1,46 @@
-function CommentView(postId, postComments) {
+function NewCommentView(postId, postComments) {
 
-    this.domNode = document.createElement("p");
-    this.postId = postId;
-    this.postComments = postComments;
+    function CommentView(postId, postComments) {
+        this.domNode = document.createElement("p");
+        this.postId = postId;
+        this.postComments = postComments;
+    }
 
+    var commentView = new CommentView(postId, postComments);
     var utils = new Utils();
 
     var submitComment = function () {
 
         var comText = this.newComment.value;
-        if(comText !== "" ){
+        if (comText !== "") {
             postComment(comText);
         }
 
-    }.bind(this);
+    }.bind(commentView);
 
     var postComment = function (comText) {
         var xhttp;
         xhttp = new XMLHttpRequest();
 
-        xhttp.onload = function (){
+        xhttp.onload = function () {
             postComments.innerHTML = "";
-            utils.fetchComments(this.postId , this.postComments);
+            utils.fetchComments(this.postId, this.postComments);
         }.bind(this);
 
         var commentedById = localStorage.getItem("userId");
         var commentedByName = localStorage.getItem("username");
-        var JSONObj = {"commentedOn" : this.postId , "commentedText" : comText , "commentedBy" : commentedById , "commentedByName" : commentedByName};
+        var JSONObj = {
+            "commentedOn": this.postId,
+            "commentedText": comText,
+            "commentedBy": commentedById,
+            "commentedByName": commentedByName
+        };
         xhttp.open("POST", "/postComment");
         xhttp.setRequestHeader("Content-type", "application/json");
         xhttp.send(JSON.stringify(JSONObj));
-    }.bind(this);
+    }.bind(commentView);
 
-    this.populateDom = function () {
+    CommentView.prototype.populateDom = function () {
 
         var newComment = document.createElement("textarea");
         this.newComment = newComment;
@@ -43,9 +51,12 @@ function CommentView(postId, postComments) {
         var arrayComment = [newComment, submitButton];
 
         utils.appendMultipleChildren(this.domNode, arrayComment);
-        submitButton.addEventListener("click", submitComment);
+        submitButton.addEventListener("click", function () {
+            submitComment();
+        });
 
         return this.domNode;
     };
 
+    return commentView;
 }

@@ -48,7 +48,7 @@ router.post('/getPost', function(req,res){
     });
 });
 
-router.post('/checkVoted' , function(req,res){
+router.post('/checkPostVoted' , function(req,res){
     var postId = req.body.postId;
     var userId = req.body.userId;
     var query = {'postId' : postId , 'userId' : userId};
@@ -71,8 +71,8 @@ router.post('/checkVoted' , function(req,res){
     });
 });
 
-router.post('/voteIncrement', function(req,res){
-    var postId = req.body.id;
+router.post('/postVoteIncrement', function(req,res){
+    var postId = req.body.postId;
     var userId = req.body.userId;
     var query = { _id : postId};
     var incrementBy = 0;
@@ -111,9 +111,9 @@ router.post('/voteIncrement', function(req,res){
     });
 });
 
-router.post('/voteDecrement', function(req,res){
+router.post('/postVoteDecrement', function(req,res){
 
-    var postId = req.body.id;
+    var postId = req.body.postId;
     var userId = req.body.userId;
     var query = { _id : postId};
     var queryUserPostDatabase = {'postId' : postId , 'userId' : userId};

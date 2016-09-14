@@ -11,7 +11,7 @@ function getPost(postId){
     xhttp.onreadystatechange = function() {
         if(xhttp.readyState == 4 && xhttp.status == 200) {
             var postArr = JSON.parse(xhttp.responseText);
-            var post = new Post(postArr);
+            var post = new PostArr(postArr);
             document.getElementById("post").appendChild(post.populateDom());
         }
     };

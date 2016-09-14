@@ -17,7 +17,7 @@ function fetchPosts(){
 
     function myFunction(arr) {
         for(var i = 0; i < arr.length; i++) {
-            var newPost = new Post(arr[i]);
+            var newPost = new PostArr(arr[i]);
             document.getElementById("posts").appendChild(newPost.populateDom());
         }
     }

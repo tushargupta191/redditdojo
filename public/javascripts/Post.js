@@ -1,87 +1,38 @@
-function Post(postArr) {
-    this.postArr = postArr;
-    this.userId = localStorage.getItem("userId");
-    this.domNode = document.createElement("div");
+function PostArr(postArr) {
 
+    function Post(postArr) {
+        this.postArr = postArr;
+        this.userId = localStorage.getItem("userId");
+        this.domNode = document.createElement("div");
+        this.JSONObj = {"postId": this.postArr["_id"], "userId": this.userId};
+    }
+
+    var post = new Post(postArr);
     var utils = new Utils();
 
     var incrementPostVoteHelper = function () {
         utils.manageButtonUpColor(this.buttonUp, this.buttonDown);
-        incrementPostVote();
-    }.bind(this);
+        utils.updateVote(this.JSONObj , "/postVoteIncrement" , this.postVotes , "postVotes");
+
+    }.bind(post);
 
     var decrementPostVoteHelper = function () {
         utils.manageButtonDownColor(this.buttonUp, this.buttonDown);
-        decrementPostVote();
-    }.bind(this);
+        utils.updateVote(this.JSONObj , "/postVoteDecrement" , this.postVotes , "postVotes");
+
+    }.bind(post);
 
     var getComments = function () {
         this.commentButton.disabled = true;
         utils.fetchComments(this.postArr["_id"], this.postComments);
-    }.bind(this);
+
+    }.bind(post);
 
     var openParticularPost = function () {
         window.location.pathname = '/feed/post=' + this.postArr["_id"];
-    }.bind(this);
+    }.bind(post);
 
-    var checkVoted = function () {
-        var xhttp;
-        xhttp = new XMLHttpRequest();
-
-        xhttp.onload = function () {
-            var voteStatus = JSON.parse(xhttp.responseText);
-            if(voteStatus == 1){
-                this.buttonUp.style.background = utils.colorIfVoted;
-                this.buttonDown.style.background = utils.colorIfNotVoted;
-            }
-            else if(voteStatus == -1){
-                this.buttonDown.style.background = utils.colorIfVoted;
-                this.buttonUp.style.background = utils.colorIfNotVoted;
-            }
-            else if(voteStatus == 0){
-                this.buttonUp.style.background = utils.colorIfNotVoted;
-                this.buttonDown.style.background = utils.colorIfNotVoted;
-            }
-        }.bind(this);
-
-        var JSONObj = {"postId" : this.postArr["_id"] , "userId" : this.userId};
-        xhttp.open("POST", "/checkVoted");
-        xhttp.setRequestHeader("Content-type", "application/json");
-        xhttp.send(JSON.stringify(JSONObj));
-
-    }.bind(this);
-
-    var incrementPostVote = function(){
-        var xhttp;
-        xhttp = new XMLHttpRequest();
-
-        xhttp.onload = function (){
-            var myArr = JSON.parse(xhttp.responseText);
-            this.postVotes.innerHTML = myArr["postVotes"];
-        }.bind(this);
-
-        var JSONObj = { "id" : this.postArr["_id"] , "userId" : this.userId};
-        xhttp.open("POST", "/voteIncrement");
-        xhttp.setRequestHeader("Content-type", "application/json");
-        xhttp.send(JSON.stringify(JSONObj));
-    }.bind(this);
-
-    var decrementPostVote = function () {
-        var xhttp;
-        xhttp = new XMLHttpRequest();
-
-        xhttp.onload = function (){
-            var myArr = JSON.parse(xhttp.responseText);
-            this.postVotes.innerHTML = myArr["postVotes"];
-        }.bind(this);
-
-        var JSONObj = { "id" : this.postArr["_id"] , "userId" : this.userId};
-        xhttp.open("POST", "/voteDecrement");
-        xhttp.setRequestHeader("Content-type", "application/json");
-        xhttp.send(JSON.stringify(JSONObj));
-    }.bind(this);
-
-    this.populateDom = function () {
+    Post.prototype.populateDom = function () {
 
         var postVotes = utils.addPElement(this.postArr["postVotes"] + "  ");
         this.postVotes = postVotes;
@@ -127,13 +78,24 @@ function Post(postArr) {
         var arrayPost = [postVotes, paraOfButtons, postTitle, paraOfSubTitle, postText, commentButton, postComments, line];
         utils.appendMultipleChildren(this.domNode, arrayPost);
 
-        checkVoted();
+        utils.checkVoted(this.JSONObj, "/checkPostVoted" , this.buttonUp , this.buttonDown);
 
-        buttonUp.addEventListener("click", incrementPostVoteHelper());
-        buttonDown.addEventListener("click", decrementPostVoteHelper());
-        commentButton.addEventListener("click", getComments());
-        postTitle.addEventListener("click", openParticularPost());
+        buttonUp.addEventListener("click", function () {
+            incrementPostVoteHelper();
+        });
+        buttonDown.addEventListener("click", function () {
+            decrementPostVoteHelper();
+        });
+        commentButton.addEventListener("click", function () {
+            getComments();
+        });
+        postTitle.addEventListener("click", function () {
+            openParticularPost();
+        });
 
         return this.domNode;
     };
+
+    return post;
+
 }

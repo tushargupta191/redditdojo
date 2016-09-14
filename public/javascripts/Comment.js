@@ -1,86 +1,34 @@
-function Comment(commentArr) {
-    this.commentArr = commentArr;
-    this.userId = localStorage.getItem("userId");
-    this.domNode = document.createElement("div");
+function CommentArr(commentArr) {
 
+    function Comment(commentArr) {
+        this.commentArr = commentArr;
+        this.userId = localStorage.getItem("userId");
+        this.domNode = document.createElement("div");
+        this.JSONObj = {"commentId": this.commentArr["_id"], "userId": this.userId};
+    }
+
+    var comment = new Comment(commentArr);
     var utils = new Utils();
 
     var incrementCommentVoteHelper = function () {
         utils.manageButtonUpColor(this.commentUp, this.commentDown);
-        incrementCommentVote();
-    }.bind(this);
+        utils.updateVote(this.JSONObj , "/commentVoteIncrement" , this.commentVotes , "commentVotes");
+
+    }.bind(comment);
 
     var decrementCommentVoteHelper = function () {
         utils.manageButtonDownColor(this.commentUp, this.commentDown);
-        decrementCommentVote();
-    }.bind(this);
+        utils.updateVote(this.JSONObj , "/commentVoteDecrement" , this.commentVotes , "commentVotes");
+
+    }.bind(comment);
 
     var getNestedComments = function () {
         this.nestedCommentButton.disabled = true;
-        utils.fetchComments(this.commentArr["_id"] , this.nestedComments);
-    }.bind(this);
+        utils.fetchComments(this.commentArr["_id"], this.nestedComments);
 
-    var incrementCommentVote = function () {
-        var xhttp;
-        xhttp = new XMLHttpRequest();
+    }.bind(comment);
 
-        xhttp.onload = function(){
-            var myArr = JSON.parse(xhttp.responseText);
-            this.commentVotes.innerHTML = myArr["commentVotes"];
-        }.bind(this);
-
-        var JSONObj = {"commentId" : this.commentArr["_id"] , "userId" : this.userId};
-        xhttp.open("POST" , "/commentVoteIncrement");
-        xhttp.setRequestHeader("Content-type", "application/json");
-        xhttp.send(JSON.stringify(JSONObj));
-    }.bind(this);
-
-    var decrementCommentVote = function () {
-        var xhttp;
-        xhttp = new XMLHttpRequest();
-
-        xhttp.onload = function(){
-            var myArr = JSON.parse(xhttp.responseText);
-            this.commentVotes.innerHTML = myArr["commentVotes"];
-        }.bind(this);
-
-        var JSONObj = {"commentId" : this.commentArr["_id"] , "userId" : this.userId};
-        xhttp.open("POST" , "/commentVoteDecrement");
-        xhttp.setRequestHeader("Content-type", "application/json");
-        xhttp.send(JSON.stringify(JSONObj));
-    }.bind(this);
-
-    var checkCommentVoted = function () {
-        var xhttp;
-        xhttp = new XMLHttpRequest();
-
-        var utils = new Utils();
-
-        xhttp.onload = function () {
-            var voteStatus = JSON.parse(xhttp.responseText);
-            if(voteStatus == 1){
-                this.commentUp.style.background = utils.colorIfVoted;
-                this.commentDown.style.background = utils.colorIfNotVoted;
-            }
-            else if(voteStatus == -1){
-                this.commentDown.style.background = utils.colorIfVoted;
-                this.commentUp.style.background = utils.colorIfNotVoted;
-            }
-            else if(voteStatus == 0){
-                this.commentUp.style.background = utils.colorIfNotVoted;
-                this.commentDown.style.background = utils.colorIfNotVoted;
-            }
-        }.bind(this);
-
-        var JSONObj = {"commentId" : this.commentArr["_id"] , "userId" : this.userId};
-        xhttp.open("POST", "/checkCommentVoted");
-        xhttp.setRequestHeader("Content-type", "application/json");
-        xhttp.send(JSON.stringify(JSONObj));
-    }.bind(this);
-
-
-
-    this.populateDom = function(){
+    Comment.prototype.populateDom = function () {
 
         var commentUp = utils.addButtonElement("+");
         this.commentUp = commentUp;
@@ -94,7 +42,7 @@ function Comment(commentArr) {
         this.commentVotes = commentVotes;
 
         var commentText = utils.addPElement(this.commentArr["commentText"]);
-        utils.addPadding(this.domNode, commentVotes , commentText);
+        utils.addPadding(this.domNode, commentVotes, commentText);
 
         var commentFirstLine = document.createElement("div");
         var arrayCommentFirstLine = [commentUp, commentDown, commentedBy];
@@ -114,14 +62,23 @@ function Comment(commentArr) {
         var arrayComment = [commentFirstLine, commentSecondLine, nestedCommentButton, nestedComments, line];
         utils.appendMultipleChildren(this.domNode, arrayComment);
 
-        checkCommentVoted();
+        utils.checkVoted(this.JSONObj , "/checkCommentVoted" , commentUp , commentDown);
 
-        commentUp.addEventListener("click" , incrementCommentVoteHelper);
-        commentDown.addEventListener("click" , decrementCommentVoteHelper);
-        nestedCommentButton.addEventListener("click" , getNestedComments);
+        commentUp.addEventListener("click", function () {
+            incrementCommentVoteHelper();
+        });
+        commentDown.addEventListener("click", function () {
+            decrementCommentVoteHelper();
+        });
+        nestedCommentButton.addEventListener("click", function () {
+            getNestedComments();
+        });
 
         return this.domNode;
+
     };
+
+    return comment;
 }
 
 
