@@ -42,13 +42,12 @@ function NewCommentView(postId, postComments) {
 
     CommentView.prototype.populateDom = function () {
 
-        var newComment = document.createElement("textarea");
-        this.newComment = newComment;
+        this.newComment = document.createElement("textarea");
         utils.addPadding(this.domNode);
 
         var submitButton = utils.addButtonElement("submit");
 
-        var arrayComment = [newComment, submitButton];
+        var arrayComment = [this.newComment, submitButton];
 
         utils.appendMultipleChildren(this.domNode, arrayComment);
         submitButton.addEventListener("click", function () {

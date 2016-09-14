@@ -30,47 +30,43 @@ function CommentArr(commentArr) {
 
     Comment.prototype.populateDom = function () {
 
-        var commentUp = utils.addButtonElement("+");
-        this.commentUp = commentUp;
+        this.commentUp = utils.addButtonElement("+");
 
-        var commentDown = utils.addButtonElement("-");
-        this.commentDown = commentDown;
-        utils.setStyleAttribute(commentUp, commentDown);
+        this.commentDown = utils.addButtonElement("-");
+
+        utils.setStyleAttribute(this.commentUp, this.commentDown);
 
         var commentedBy = utils.addPElement(" " + this.commentArr["commentedByName"]);
-        var commentVotes = utils.addPElement(this.commentArr["commentVotes"]);
-        this.commentVotes = commentVotes;
+        this.commentVotes = utils.addPElement(this.commentArr["commentVotes"]);
 
         var commentText = utils.addPElement(this.commentArr["commentText"]);
-        utils.addPadding(this.domNode, commentVotes, commentText);
+        utils.addPadding(this.domNode, this.commentVotes, commentText);
 
         var commentFirstLine = document.createElement("div");
-        var arrayCommentFirstLine = [commentUp, commentDown, commentedBy];
+        var arrayCommentFirstLine = [this.commentUp, this.commentDown, commentedBy];
         utils.appendMultipleChildren(commentFirstLine, arrayCommentFirstLine);
 
         var commentSecondLine = document.createElement("div");
-        var arrayCommentSecondLine = [commentVotes, commentText];
+        var arrayCommentSecondLine = [this.commentVotes, commentText];
         utils.appendMultipleChildren(commentSecondLine, arrayCommentSecondLine);
 
-        var nestedCommentButton = utils.addButtonElement("Comments");
-        this.nestedCommentButton = nestedCommentButton;
+        this.nestedCommentButton = utils.addButtonElement("Comments");
 
-        var nestedComments = document.createElement("p");
-        this.nestedComments = nestedComments;
+        this.nestedComments = document.createElement("p");
         var line = document.createElement("br");
 
-        var arrayComment = [commentFirstLine, commentSecondLine, nestedCommentButton, nestedComments, line];
+        var arrayComment = [commentFirstLine, commentSecondLine, this.nestedCommentButton, this.nestedComments, line];
         utils.appendMultipleChildren(this.domNode, arrayComment);
 
-        utils.checkVoted(this.JSONObj , "/checkCommentVoted" , commentUp , commentDown);
+        utils.checkVoted(this.JSONObj , "/checkCommentVoted" , this.commentUp , this.commentDown);
 
-        commentUp.addEventListener("click", function () {
+        this.commentUp.addEventListener("click", function () {
             incrementCommentVoteHelper();
         });
-        commentDown.addEventListener("click", function () {
+        this.commentDown.addEventListener("click", function () {
             decrementCommentVoteHelper();
         });
-        nestedCommentButton.addEventListener("click", function () {
+        this.nestedCommentButton.addEventListener("click", function () {
             getNestedComments();
         });
 

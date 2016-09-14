@@ -34,19 +34,16 @@ function PostArr(postArr) {
 
     Post.prototype.populateDom = function () {
 
-        var postVotes = utils.addPElement(this.postArr["postVotes"] + "  ");
-        this.postVotes = postVotes;
+        this.postVotes = utils.addPElement(this.postArr["postVotes"] + "  ");
 
-        var buttonUp = utils.addButtonElement("Upvote");
-        this.buttonUp = buttonUp;
+        this.buttonUp = utils.addButtonElement("Upvote");
 
-        var buttonDown = utils.addButtonElement("Downvote");
-        this.buttonDown = buttonDown;
+        this.buttonDown = utils.addButtonElement("Downvote");
 
         var paraOfButtons = document.createElement("p");
         paraOfButtons.setAttribute("style", "display:inline");
 
-        var arrayButtons = [buttonUp, buttonDown];
+        var arrayButtons = [this.buttonUp, this.buttonDown];
         utils.appendMultipleChildren(paraOfButtons, arrayButtons);
 
         var postTitle = utils.addPElementWithMargin(this.postArr["postTitle"]);
@@ -66,27 +63,25 @@ function PostArr(postArr) {
 
         var postText = utils.addPElementWithMargin(this.postArr["postText"]);
 
-        var commentButton = utils.addButtonElement("Comments");
-        commentButton.style.marginTop = "5px";
-        this.commentButton = commentButton;
+        this.commentButton = utils.addButtonElement("Comments");
+        this.commentButton.style.marginTop = "5px";
 
-        var postComments = document.createElement("p");
-        this.postComments = postComments;
+        this.postComments = document.createElement("p");
 
         var line = document.createElement("hr");
 
-        var arrayPost = [postVotes, paraOfButtons, postTitle, paraOfSubTitle, postText, commentButton, postComments, line];
+        var arrayPost = [this.postVotes, paraOfButtons, postTitle, paraOfSubTitle, postText, this.commentButton, this.postComments, line];
         utils.appendMultipleChildren(this.domNode, arrayPost);
 
         utils.checkVoted(this.JSONObj, "/checkPostVoted" , this.buttonUp , this.buttonDown);
 
-        buttonUp.addEventListener("click", function () {
+        this.buttonUp.addEventListener("click", function () {
             incrementPostVoteHelper();
         });
-        buttonDown.addEventListener("click", function () {
+        this.buttonDown.addEventListener("click", function () {
             decrementPostVoteHelper();
         });
-        commentButton.addEventListener("click", function () {
+        this.commentButton.addEventListener("click", function () {
             getComments();
         });
         postTitle.addEventListener("click", function () {

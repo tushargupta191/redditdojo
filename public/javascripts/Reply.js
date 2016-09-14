@@ -17,13 +17,12 @@ function AddReply(postComments, postId) {
     }.bind(reply);
 
     Reply.prototype.populateDom = function () {
-        var replyButton = utils.addButtonElement("Reply");
-        this.replyButton = replyButton;
+        this.replyButton = utils.addButtonElement("Reply");
 
-        this.domNode.appendChild(replyButton);
+        this.domNode.appendChild(this.replyButton);
         utils.addPadding(this.domNode);
 
-        replyButton.addEventListener("click", function () {
+        this.replyButton.addEventListener("click", function () {
             createCommentView();
         });
 
