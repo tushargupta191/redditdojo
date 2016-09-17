@@ -12,6 +12,7 @@
             </div>
 
             <div>
+                <p id="b">Blah blah</p>
                 <p style = "font-size : 120%" align="left">Hello <%= user.local.username %> </p>
 
                 <script>
@@ -30,11 +31,29 @@
             <div id="posts"></div>
         </div>
 
-        <script src="/javascripts/Comment.js"></script>
-        <script src="/javascripts/CommentView.js"></script>
-        <script src="/javascripts/feedPost.js"></script>
-        <script src="/javascripts/Post.js"></script>
-        <script src="/javascripts/Reply.js"></script>
-        <script src="/javascripts/Utils.js"></script>
+
+        <script type="text/javascript">
+            var dojoConfig = {
+                async: true,
+                packages: [
+                    {
+                        name: "dojoFiles",
+                        location: "/dojo"
+                    }
+                ]
+            };
+        </script>
+
+        <script src="http://ajax.googleapis.com/ajax/libs/dojo/1.7.8/dojo/dojo.js" data-dojo-config="async: true"></script>
+
+
+        <script type="text/javascript">
+
+            require(["dojoFiles/FetchPosts"], function () {
+                var posts = new fetchPosts();
+                posts.fetch();
+            });
+
+        </script>
     </body>
 </html>
