@@ -1,11 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="db53cc4f-2259-48f5-b981-3f94925ce85e" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/views/customizedPost.ejs" afterPath="$PROJECT_DIR$/views/customizedPost.ejs" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/views/feed.ejs" afterPath="$PROJECT_DIR$/views/feed.ejs" />
-    </list>
+    <list default="true" id="db53cc4f-2259-48f5-b981-3f94925ce85e" name="Default" comment="" />
     <ignored path="reddit.iws" />
     <ignored path=".idea/workspace.xml" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -426,12 +422,12 @@
       <workItem from="1473929638050" duration="13020000" />
       <workItem from="1474010630635" duration="21931000" />
       <workItem from="1474122839374" duration="78000" />
-      <workItem from="1474122930213" duration="35000" />
+      <workItem from="1474122930213" duration="86000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="137122000" />
+    <option name="totallyTimeSpent" value="137173000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1280" height="800" extended-state="0" />
