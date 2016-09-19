@@ -1,10 +1,16 @@
+define([
+    'dojo/_base/declare',
+    'dojo/_base/xhr'
+], function (declare, xhr){
 
-function checkVoted(JSONObj , route , buttonUp , buttonDown){
-    var colorIfVoted = "rgb(255, 153, 51)";
-    var colorIfNotVoted = "rgb(254, 254, 254)";
+    return declare("Utils", null, {
 
-    require(["dojo/_base/xhr"],
-        function(xhr ) {
+        constructor : function(){
+            this.colorIfVoted = "rgb(255, 153, 51)";
+            this.colorIfNotVoted = "rgb(254, 254, 254)";
+        },
+
+        checkVoted : function(JSONObj , route , buttonUp , buttonDown){
             xhr.post({
                 url: route,
                 postData: JSON.stringify(JSONObj),
@@ -12,24 +18,22 @@ function checkVoted(JSONObj , route , buttonUp , buttonDown){
                 load: function(result) {
                     var voteStatus = JSON.parse(result);
                     if (voteStatus == 1) {
-                        buttonUp.style.background = colorIfVoted;
-                        buttonDown.style.background = colorIfNotVoted;
+                        buttonUp.style.background = this.colorIfVoted;
+                        buttonDown.style.background = this.colorIfNotVoted;
                     }
                     else if (voteStatus == -1) {
-                        buttonDown.style.background = colorIfVoted;
-                        buttonUp.style.background = colorIfNotVoted;
+                        buttonDown.style.background = this.colorIfVoted;
+                        buttonUp.style.background = this.colorIfNotVoted;
                     }
                     else if (voteStatus == 0) {
-                        buttonUp.style.background = colorIfNotVoted;
-                        buttonDown.style.background = colorIfNotVoted;
+                        buttonUp.style.background = this.colorIfNotVoted;
+                        buttonDown.style.background = this.colorIfNotVoted;
                     }
-                }
-            });
-        });
-}
-function updateVote(JSONObj , votesElement , route , voteId){
-    require(["dojo/_base/xhr"],
-        function(xhr ) {
+                }.bind(this)
+            })
+        },
+
+        updateVote : function(JSONObj , votesElement , route , voteId){
             xhr.post({
                 url: route,
                 postData: JSON.stringify(JSONObj),
@@ -39,35 +43,30 @@ function updateVote(JSONObj , votesElement , route , voteId){
                     votesElement.innerHTML = arr[voteId];
                 }
             });
-        });
-}
+        },
 
-function manageButtonUpColor(buttonUp , buttonDown) {
-    var colorIfVoted = "rgb(255, 153, 51)";
-    var colorIfNotVoted = "rgb(254, 254, 254)";
+        manageButtonUpColor : function (buttonUp , buttonDown) {
+            if(buttonDown.style.backgroundColor == this.colorIfVoted){
+                buttonDown.style.backgroundColor = this.colorIfNotVoted;
+            }
+            if(buttonUp.style.backgroundColor == this.colorIfVoted){
+                buttonUp.style.background = this.colorIfNotVoted;
+            }
+            else if(buttonUp.style.backgroundColor == this.colorIfNotVoted){
+                buttonUp.style.background = this.colorIfVoted;
+            }
+        },
 
-    if(buttonDown.style.backgroundColor == colorIfVoted){
-        buttonDown.style.backgroundColor = colorIfNotVoted;
-    }
-    if(buttonUp.style.backgroundColor == colorIfVoted){
-        buttonUp.style.background = colorIfNotVoted;
-    }
-    else if(buttonUp.style.backgroundColor == colorIfNotVoted){
-        buttonUp.style.background = colorIfVoted;
-    }
-}
-
-function manageButtonDownColor(buttonUp , buttonDown) {
-    var colorIfVoted = "rgb(255, 153, 51)";
-    var colorIfNotVoted = "rgb(254, 254, 254)";
-
-    if(buttonUp.style.backgroundColor == colorIfVoted){
-        buttonUp.style.backgroundColor = colorIfNotVoted;
-    }
-    if(buttonDown.style.backgroundColor == colorIfVoted){
-        buttonDown.style.background = colorIfNotVoted;
-    }
-    else if(buttonDown.style.backgroundColor == colorIfNotVoted){
-        buttonDown.style.background = colorIfVoted;
-    }
-}
+        manageButtonDownColor : function (buttonUp , buttonDown) {
+            if(buttonUp.style.backgroundColor == this.colorIfVoted){
+                buttonUp.style.backgroundColor = this.colorIfNotVoted;
+            }
+            if(buttonDown.style.backgroundColor == this.colorIfVoted){
+                buttonDown.style.background = this.colorIfNotVoted;
+            }
+            else if(buttonDown.style.backgroundColor == this.colorIfNotVoted){
+                buttonDown.style.background = this.colorIfVoted;
+            }
+        }
+    })
+});

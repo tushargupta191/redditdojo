@@ -5,22 +5,21 @@ define([
     "dojoFiles/Posts"
 ],function(declare,xhr, dom){
 
-    return declare("fetchPosts" , null , {
+    return declare("FetchPosts" , null , {
 
         fetch : function(){
             xhr.get({
                 url: "/getPosts",
                 load: function (result) {
-                        var postArr = JSON.parse(result);
-                        for (var i = 0; i < postArr.length; i++) {
-                            var postFeed = new posts(postArr[i]);
-                            var node = dom.byId('posts');
-                            node.appendChild(postFeed.populateFeed());
-                        }
+                    var postArr = JSON.parse(result);
 
+                    for (var i = 0; i < postArr.length; i++) {
+                        var postFeed = new Posts(postArr[i]);
+                        var postElement = dom.byId('posts');
+                        postElement.appendChild(postFeed.populateFeed());
+                    }
                 }
             })
-
          }
     })
 });

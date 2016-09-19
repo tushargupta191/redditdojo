@@ -1,21 +1,28 @@
-function getPost(){
+define([
+    "dojo/_base/declare",
+    "dojo/_base/xhr",
+    "dojo/dom",
+    "dojoFiles/Posts"
+], function(declare, xhr, dom){
 
-    var str = window.location.href;
-    var res = str.split("=");
+    return declare("GetPosts" , null , {
 
-    require(["dojo/_base/xhr"],
-        function(xhr ) {
+        getPost : function () {
+            var str = window.location.href;
+            var res = str.split("=");
+
             xhr.post({
                 url: "/getPost",
                 postData: JSON.stringify({ "postId" : res[1] }),
                 headers : {"Content-type" : "application/json"},
                 load: function(result) {
-                    require(["dojoFiles/Posts"], function () {
-                        var postArr = JSON.parse(result);
-                        populateFeed(postArr);
-
-                    });
+                    var postArr = JSON.parse(result);
+                    var post = new Posts(postArr);
+                    var postElement = dom.byId('post');
+                    postElement.appendChild(post.populateFeed());
                 }
             });
-        });
-}
+        }
+    });
+});
+

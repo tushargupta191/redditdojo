@@ -12,7 +12,7 @@
             </div>
 
             <div>
-                <p id="posts" style = "font-size: 120%"></p>
+                <p id="post" style = "font-size: 120%"></p>
 
 
                 <script type="text/javascript">
@@ -32,7 +32,8 @@
 
                 <script type="text/javascript">
                     require(["dojoFiles/GetPost"], function () {
-                        getPost();
+                        var post = new GetPosts();
+                        post.getPost();
                     });
 
                 </script>
