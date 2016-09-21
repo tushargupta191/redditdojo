@@ -3,27 +3,21 @@ define([
     'dojo/_base/xhr',
     'dijit/_WidgetBase',
     'dijit/_TemplatedMixin',
-    'dojo/text!./templates/newComment.html'
-], function (declare , xhr , _WidgetBase, _TemplatedMixin , template ) {
+    'dojo/text!./templates/newComment.html',
+    'dojoFiles/xhrModel'
+], function (declare , xhr , _WidgetBase, _TemplatedMixin , template , xhrModel) {
 
     return declare([_WidgetBase, _TemplatedMixin] , {
 
         templateString : template,
 
-        constructor : function(func , postId){
-            this.postId = postId;
-            this.func = func;
+        constructor : function(paramsObj){
         },
 
-        _addComment : function (JSONObj) {
-            xhr.post({
-                url: "/postComment",
-                postData: JSON.stringify(JSONObj),
-                headers : {"Content-type" : "application/json"},
-                load: function() {
-                    this.func();
-                }.bind(this)
-            });
+        _addComment : function (paramsObj) {
+            xhrModel.xhrPostRequest(paramsObj , "/postComment").then(function(){
+                this.func();
+            }.bind(this))
         },
 
         _addNewComment : function(){

@@ -6,6 +6,6 @@ require([
     ],
     function(FetchPosts){
         var fetchPosts = new FetchPosts();
-        fetchPosts._fetch();
+        fetchPosts._fetchPosts();
     }
 );

@@ -10,11 +10,13 @@ define([
     'dojo/text!./templates/post.html',
     'dojoFiles/Utils',
     'dojoFiles/Comments',
-    'dojoFiles/AddComment'
+    'dojoFiles/AddComment',
+    'dojoFiles/xhrUtils',
+    'dojoFiles/Parent'
 
-],function ( declare , domConstruct, on , _WidgetBase, _TemplatedMixin , template , Utils , Comments ,  AddComment){
+],function ( declare , domConstruct, on , _WidgetBase, _TemplatedMixin , template , Utils , Comments ,  AddComment , xhrUtils , Parent ){
 
-    return declare([_WidgetBase, _TemplatedMixin], {
+    return declare([_WidgetBase, _TemplatedMixin, Parent], {
 
         templateString : template,
 
@@ -25,43 +27,23 @@ define([
         },
 
         postCreate: function(){
-            Utils.checkVoted(this.JSONObj, "/checkPostVoted", this.buttonUp, this.buttonDown);
-        },
-
-        _incrementVote : function(){
-            Utils.manageButtonUpColor(this.buttonUp, this.buttonDown);
-            Utils.updateVote(this.JSONObj, this.postVotes, "/postVoteIncrement", "postVotes");
-        },
-
-        _decrementVote : function(){
-            Utils.manageButtonDownColor(this.buttonUp, this.buttonDown);
-            Utils.updateVote(this.JSONObj, this.postVotes, "/postVoteDecrement", "postVotes");
+            this.votesElement = this.postVotes;
+            this.routeIncrement = "/postVoteIncrement";
+            this.routeDecrement = "/postVoteDecrement";
+            this.voteId = "postVotes";
+            this.commentDom = this.postComments;
+            this.uid = this.postObj["_id"];
+            xhrUtils.checkVoted(this.JSONObj, "/checkPostVoted", this.buttonUp, this.buttonDown);
         },
 
         _openPost : function(){
             window.location.pathname = '/feed/post=' + this.postObj["_id"];
         },
 
-        _openComments : function () {
-
-            this.postComments.innerHTML = "";
-
-            Utils.getAllComments(this.postObj["_id"]).then(function(result){
-                var commentObj = JSON.parse(result);
-
-                for(var i=0; i<commentObj.length ; i++){
-                    new Comments(commentObj[i]).placeAt(this.postComments);
-                }
-
-                var replyButton = domConstruct.create("button", {style : {padding : "0px 0px 0px 20px"} , innerHTML : "Reply"} , this.postComments);
-                on(replyButton , "click" , function(){
-                    domConstruct.destroy(replyButton);
-                    new AddComment(this._openComments.bind(this) , this.postObj["_id"]).placeAt(this.postComments);
-                }.bind(this))
-
-            }.bind(this));
-
+        populateComments : function(commentObj){
+            new Comments(commentObj).placeAt(this.commentDom);
         }
+
 
     })
 });
