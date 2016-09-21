@@ -3,62 +3,66 @@
  */
 define([
     'dojo/_base/declare',
-    'dojo/dom',
     'dojo/dom-construct',
     'dojo/on',
+    'dijit/_WidgetBase',
+    'dijit/_TemplatedMixin',
+    'dojo/text!./templates/post.html',
     'dojoFiles/Utils',
-    'dojoFiles/FetchComments'
-],function ( declare , dom, domConstruct, on){
+    'dojoFiles/Comments',
+    'dojoFiles/AddComment'
 
-    return declare("Posts", null, {
+],function ( declare , domConstruct, on , _WidgetBase, _TemplatedMixin , template , Utils , Comments ,  AddComment){
 
-        constructor : function(postArr){
-            this.postArr = postArr;
-            this.newPost = domConstruct.create("div" , null );
+    return declare([_WidgetBase, _TemplatedMixin], {
+
+        templateString : template,
+
+        constructor : function(postObj){
+            this.postObj = postObj;
+            this.userId = localStorage.getItem("userId");
+            this.JSONObj = {"postId": this.postObj["_id"], "userId": this.userId};
         },
 
-        populateFeed : function () {
+        postCreate: function(){
+            Utils.checkVoted(this.JSONObj, "/checkPostVoted", this.buttonUp, this.buttonDown);
+        },
 
-            var utils = new Utils();
-            var fetchComments = new FetchComments();
-            var userId = localStorage.getItem("userId");
-            var JSONObj = {"postId": this.postArr["_id"], "userId": userId};
-            var postId = this.postArr["_id"];
+        _incrementVote : function(){
+            Utils.manageButtonUpColor(this.buttonUp, this.buttonDown);
+            Utils.updateVote(this.JSONObj, this.postVotes, "/postVoteIncrement", "postVotes");
+        },
 
-            var paraButtons = domConstruct.create("p" , {style : { display : "inline"} }, this.newPost);
-            var postVotes = domConstruct.create("p" , {style : { display : "inline"} , innerHTML : this.postArr["postVotes"]} , this.newPost);
-            var buttonUp = domConstruct.create("button" , {style : {backgroundColor : utils.colorIfNotVoted},innerHTML : "Up" } , paraButtons);
-            var buttonDown = domConstruct.create("button" , {style : {backgroundColor : utils.colorIfNotVoted},innerHTML : "Down"} , paraButtons);
-            var postTitle = domConstruct.create("p" , {style : {margin : "0px"}, innerHTML : this.postArr["postTitle"]} , this.newPost);
-            var postedBy = domConstruct.create("p" , {style : {fontSize: "70%" , margin : "0px"}, innerHTML : "Posted By " + this.postArr["postedByName"] + " on " + this.postArr["postDate"]} , this.newPost);
-            var postText = domConstruct.create("p" , {style : {margin : "0px"},innerHTML : this.postArr["postText"]} , this.newPost);
-            var commentButton = domConstruct.create("button" , {style : {marginTop : "5px"},innerHTML : "Comments"} , this.newPost);
-            var postComments = domConstruct.create("p",null,this.newPost);
-            var line = domConstruct.create("hr" ,null , this.newPost);
+        _decrementVote : function(){
+            Utils.manageButtonDownColor(this.buttonUp, this.buttonDown);
+            Utils.updateVote(this.JSONObj, this.postVotes, "/postVoteDecrement", "postVotes");
+        },
 
-            utils.checkVoted(JSONObj, "/checkPostVoted", buttonUp, buttonDown);
+        _openPost : function(){
+            window.location.pathname = '/feed/post=' + this.postObj["_id"];
+        },
 
-            on(buttonUp, "click", function(){
-                utils.manageButtonUpColor(buttonUp, buttonDown);
-                utils.updateVote(JSONObj, postVotes, "/postVoteIncrement", "postVotes");
-            });
+        _openComments : function () {
 
-            on(buttonDown, "click", function() {
-                utils.manageButtonDownColor(buttonUp, buttonDown);
-                utils.updateVote(JSONObj, postVotes, "/postVoteDecrement", "postVotes");
-            });
+            this.postComments.innerHTML = "";
 
-            on(commentButton, "click" , function(){
-                commentButton.disabled = true;
-                fetchComments.getComments(postId , postComments);
-            });
+            Utils.getAllComments(this.postObj["_id"]).then(function(result){
+                var commentObj = JSON.parse(result);
 
-            on(postTitle , "click" , function(){
-                window.location.pathname = '/feed/post=' + postId;
-            });
+                for(var i=0; i<commentObj.length ; i++){
+                    new Comments(commentObj[i]).placeAt(this.postComments);
+                }
 
-            return this.newPost;
+                var replyButton = domConstruct.create("button", {style : {padding : "0px 0px 0px 20px"} , innerHTML : "Reply"} , this.postComments);
+                on(replyButton , "click" , function(){
+                    domConstruct.destroy(replyButton);
+                    new AddComment(this._openComments.bind(this) , this.postObj["_id"]).placeAt(this.postComments);
+                }.bind(this))
+
+            }.bind(this));
+
         }
+
     })
 });
 

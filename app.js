@@ -27,22 +27,13 @@ require("./models/commentUserVote");
 
 var app = express();
 
-var hbs = require('hbs');
-var fs = require('fs');
-
-hbs.registerPartials(__dirname + '/views/partials');
-
-app.set('view engine', 'hbs');
-app.set('views', __dirname + '/views');
-
-
 app.use(function(req,res,next){
     req.db = db;
     next();
 });
 
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'ejs');
+app.engine('html', require('ejs').renderFile);
+app.set('view engine', 'html');
 
 app.use(logger('dev'));
 app.use(bodyParser.json());
@@ -87,8 +78,6 @@ app.use(function(err, req, res, next) {
     error: {}
   });
 });
-
-app.use(express.static(__dirname + '/public'));
 
 app.listen(port);
 module.exports = app;

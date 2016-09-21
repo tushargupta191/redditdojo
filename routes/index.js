@@ -9,7 +9,7 @@ router.get('/', isLoggedIn , function(req, res, next) {
 });
 
 router.get('/login', function(req, res, next) {
-  res.render('login.ejs', { message: req.flash('loginMessage') });
+  res.render('login.html', { message: req.flash('loginMessage') });
 });
 
 router.post('/login', passport.authenticate('local-login', {
@@ -19,7 +19,7 @@ router.post('/login', passport.authenticate('local-login', {
 }));
 
 router.get('/signup', function(req, res) {
-  res.render('signup.ejs', { message: req.flash('signupMessage') });
+  res.render('signup.html', { message: req.flash('signupMessage') });
 });
 
 router.post('/signup', passport.authenticate('local-signup', {

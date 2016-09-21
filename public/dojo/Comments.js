@@ -1,56 +1,59 @@
 define([
     'dojo/_base/declare',
-    'dojo/dom',
     'dojo/dom-construct',
     'dojo/on',
+    'dijit/_WidgetBase',
+    'dijit/_TemplatedMixin',
+    'dojo/text!./templates/comment.html',
     'dojoFiles/Utils',
-    'dojoFiles/FetchComments'
-], function (declare , dom, domConstruct, on) {
+    'dojoFiles/AddComment'
+], function (declare , domConstruct, on , _WidgetBase, _TemplatedMixin , template , Utils , AddComment) {
 
-    return declare("Comments" , null , {
+    return declare("Comments" , [_WidgetBase, _TemplatedMixin] , {
 
-        constructor : function (commentArr) {
-            this.commentArr = commentArr;
-            this.comment = domConstruct.create("div" , {style : { padding : "0px 0px 0px 20px"}});
+        templateString : template,
+
+        constructor : function (commentObj) {
+            this.commentObj = commentObj;
+            this.userId = localStorage.getItem("userId");
+
+            this.JSONObj = {"commentId": this.commentObj["_id"], "userId": this.userId};
         },
 
-        populateComments : function () {
+        postCreate: function(){
+            Utils.checkVoted(this.JSONObj, "/checkCommentVoted", this.buttonUp, this.buttonDown);
+        },
 
-            var utils = new Utils();
-            var fetchComments = new FetchComments();
-            var userId = localStorage.getItem("userId");
-            var JSONObj = {"commentId": this.commentArr["_id"], "userId": userId};
+        _incrementVote : function(){
+            Utils.manageButtonUpColor(this.buttonUp, this.buttonDown);
+            Utils.updateVote(this.JSONObj, this.commentVotes, "/commentVoteIncrement", "commentVotes");
+        },
 
-            var commentFirstLine = domConstruct.create("div", null , this.comment);
-            var commentSecondLine = domConstruct.create("div" , null , this.comment);
-            var buttonUp = domConstruct.create("button" , {style : {display : "inline", backgroundColor : utils.colorIfNotVoted},innerHTML : "+" } , commentFirstLine);
-            var buttonDown = domConstruct.create("button" , {style : {display : "inline", backgroundColor : utils.colorIfNotVoted},innerHTML : "-"} , commentFirstLine);
-            var commentedBy = domConstruct.create("p" , {style : {display : "inline"}, innerHTML : " " + this.commentArr["commentedByName"]} , commentFirstLine);
-            var commentVotes = domConstruct.create("p" , {style : {display : "inline" , padding : "0px 0px 0px 20px"}, innerHTML : this.commentArr["commentVotes"]} , commentSecondLine );
-            var commentText = domConstruct.create("p" , {style : {display : "inline" , padding :"0px 0px 0px 20px"},innerHTML : this.commentArr["commentText"]} , commentSecondLine);
-            var nestedCommentButton = domConstruct.create("button" , {innerHTML : "Comments" }, this.comment);
-            var nestedComments = domConstruct.create("p",null,this.comment);
-            var line = domConstruct.create("hr" , null , this.comment);
+        _decrementVote : function(){
+            Utils.manageButtonDownColor(this.buttonUp, this.buttonDown);
+            Utils.updateVote(this.JSONObj, this.commentVotes, "/commentVoteDecrement", "commentVotes");
+        },
 
-            utils.checkVoted(JSONObj , "/checkCommentVoted" , buttonUp , buttonDown);
+        _openNestedComments : function(){
 
-            on(buttonUp, "click", function(){
-                utils.manageButtonUpColor(buttonUp , buttonDown);
-                utils.updateVote(JSONObj, commentVotes, "/commentVoteIncrement" , "commentVotes");
-            });
+            this.nestedComments.innerHTML = "";
 
-            on(buttonDown, "click", function(){
-                utils.manageButtonDownColor(buttonUp , buttonDown);
-                utils.updateVote(JSONObj, commentVotes, "/commentVoteDecrement" , "commentVotes");
-            });
+            Utils.getAllComments(this.commentObj["_id"]).then(function(result){
+                var commentObj = JSON.parse(result);
 
-            on(nestedCommentButton, "click" , function(){
-                nestedCommentButton.disabled = true;
-                fetchComments.getComments(this.commentArr["_id"] , nestedComments);
+                for(var i=0; i<commentObj.length ; i++){
+                    new Comments(commentObj[i]).placeAt(this.nestedComments);
+                }
+                var replyButton = domConstruct.create("button", {style : {padding : "0px 0px 0px 20px"} , innerHTML : "Reply"} , this.nestedComments);
+                on(replyButton , "click" , function(){
+                    domConstruct.destroy(replyButton);
+                    new AddComment(this._openNestedComments.bind(this) , this.commentObj["_id"]).placeAt(this.nestedComments);
+                }.bind(this))
+
             }.bind(this));
 
-            return this.comment;
         }
+
     })
 
 });

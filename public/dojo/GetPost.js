@@ -3,11 +3,11 @@ define([
     "dojo/_base/xhr",
     "dojo/dom",
     "dojoFiles/Posts"
-], function(declare, xhr, dom){
+], function(declare, xhr, dom , Posts){
 
-    return declare("GetPosts" , null , {
+    return declare(null , {
 
-        getPost : function () {
+        _getPost : function () {
             var str = window.location.href;
             var res = str.split("=");
 
@@ -17,9 +17,8 @@ define([
                 headers : {"Content-type" : "application/json"},
                 load: function(result) {
                     var postArr = JSON.parse(result);
-                    var post = new Posts(postArr);
                     var postElement = dom.byId('post');
-                    postElement.appendChild(post.populateFeed());
+                    new Posts(postArr).placeAt(postElement);
                 }
             });
         }

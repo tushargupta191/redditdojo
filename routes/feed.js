@@ -2,11 +2,11 @@ var express = require('express');
 var router = express.Router();
 
 router.get('/',isLoggedIn, function(req,res){
-    res.render('feed.ejs', {user: req.user});
+    res.render('feed.html', {user: req.user});
 });
 
 router.get('/post=*', isLoggedIn, function(req,res){
-    res.render('customizedPost.ejs');
+    res.render('customizedPost.html');
 });
 
 module.exports = router;

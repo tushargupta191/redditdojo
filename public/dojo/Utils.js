@@ -3,12 +3,10 @@ define([
     'dojo/_base/xhr'
 ], function (declare, xhr){
 
-    return declare("Utils", null, {
+     return {
 
-        constructor : function(){
-            this.colorIfVoted = "rgb(255, 153, 51)";
-            this.colorIfNotVoted = "rgb(254, 254, 254)";
-        },
+        colorIfVoted : "rgb(255, 153, 51)",
+        colorIfNotVoted : "rgb(254, 254, 254)",
 
         checkVoted : function(JSONObj , route , buttonUp , buttonDown){
             xhr.post({
@@ -35,12 +33,12 @@ define([
 
         updateVote : function(JSONObj , votesElement , route , voteId){
             xhr.post({
-                url: route,
-                postData: JSON.stringify(JSONObj),
-                headers : {"Content-type" : "application/json"},
-                load: function(result) {
-                    var arr = JSON.parse(result);
-                    votesElement.innerHTML = arr[voteId];
+            url: route,
+            postData: JSON.stringify(JSONObj),
+            headers : {"Content-type" : "application/json"},
+            load: function(result) {
+                var arr = JSON.parse(result);
+                votesElement.innerHTML = arr[voteId];
                 }
             });
         },
@@ -67,6 +65,14 @@ define([
             else if(buttonDown.style.backgroundColor == this.colorIfNotVoted){
                 buttonDown.style.background = this.colorIfVoted;
             }
+        },
+
+        getAllComments : function (postId) {
+            return xhr.post({
+                url: "/getComments",
+                postData: JSON.stringify({"id": postId}),
+                headers: {"Content-type": "application/json"},
+            });
         }
-    })
+    };
 });
