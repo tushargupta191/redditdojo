@@ -23,7 +23,7 @@ define([
         constructor : function(postObj){
             this.postObj = postObj;
             this.userId = localStorage.getItem("userId");
-            this.JSONObj = {"postId": this.postObj["_id"], "userId": this.userId};
+            this.requestParams = {"postId": this.postObj["_id"], "userId": this.userId};
         },
 
         postCreate: function(){
@@ -33,7 +33,7 @@ define([
             this.voteId = "postVotes";
             this.commentDom = this.postComments;
             this.uid = this.postObj["_id"];
-            xhrUtils.checkVoted(this.JSONObj, "/checkPostVoted", this.buttonUp, this.buttonDown);
+            xhrUtils.checkVoted(this.requestParams, "/checkPostVoted", this.buttonUp, this.buttonDown);
         },
 
         _openPost : function(){

@@ -2,18 +2,13 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="db53cc4f-2259-48f5-b981-3f94925ce85e" name="Default" comment="">
-      <change type="MOVED" beforePath="$PROJECT_DIR$/public/dojo/customizedPost.js" afterPath="$PROJECT_DIR$/public/dojo/OpenSinglePost.js" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/public/dojo/feed.js" afterPath="$PROJECT_DIR$/public/dojo/PostsFeed.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/dojo/AddComment.js" afterPath="$PROJECT_DIR$/public/dojo/AddComment.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/dojo/Comments.js" afterPath="$PROJECT_DIR$/public/dojo/Comments.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/dojo/FetchPosts.js" afterPath="$PROJECT_DIR$/public/dojo/FetchPosts.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/dojo/GetPost.js" afterPath="$PROJECT_DIR$/public/dojo/GetPost.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/dojo/Parent.js" afterPath="$PROJECT_DIR$/public/dojo/Parent.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/dojo/Posts.js" afterPath="$PROJECT_DIR$/public/dojo/Posts.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/dojo/Utils.js" afterPath="$PROJECT_DIR$/public/dojo/Utils.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/dojo/templates/comment.html" afterPath="$PROJECT_DIR$/public/dojo/templates/comment.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/views/customizedPost.html" afterPath="$PROJECT_DIR$/views/customizedPost.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/views/feed.html" afterPath="$PROJECT_DIR$/views/feed.html" />
     </list>
     <ignored path="reddit.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -94,17 +89,17 @@
         <option value="$PROJECT_DIR$/public/dojo/feed.js" />
         <option value="$PROJECT_DIR$/views/feed.html" />
         <option value="$PROJECT_DIR$/views/customizedPost.html" />
-        <option value="$PROJECT_DIR$/public/dojo/FetchPosts.js" />
         <option value="$PROJECT_DIR$/public/dojo/xhrModel.js" />
-        <option value="$PROJECT_DIR$/public/dojo/GetPost.js" />
         <option value="$PROJECT_DIR$/public/dojo/xhrUtils.js" />
-        <option value="$PROJECT_DIR$/public/dojo/AddComment.js" />
-        <option value="$PROJECT_DIR$/public/dojo/Utils.js" />
         <option value="$PROJECT_DIR$/public/dojo/templates/post.html" />
         <option value="$PROJECT_DIR$/public/dojo/templates/comment.html" />
-        <option value="$PROJECT_DIR$/public/dojo/Posts.js" />
+        <option value="$PROJECT_DIR$/public/dojo/AddComment.js" />
         <option value="$PROJECT_DIR$/public/dojo/Comments.js" />
+        <option value="$PROJECT_DIR$/public/dojo/Posts.js" />
+        <option value="$PROJECT_DIR$/public/dojo/FetchPosts.js" />
+        <option value="$PROJECT_DIR$/public/dojo/GetPost.js" />
         <option value="$PROJECT_DIR$/public/dojo/Parent.js" />
+        <option value="$PROJECT_DIR$/public/dojo/Utils.js" />
       </list>
     </option>
   </component>
@@ -369,19 +364,19 @@
       <workItem from="1474271622046" duration="10307000" />
       <workItem from="1474299076359" duration="6442000" />
       <workItem from="1474356775094" duration="25307000" />
-      <workItem from="1474438953007" duration="25362000" />
+      <workItem from="1474438953007" duration="26093000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="204765000" />
+    <option name="totallyTimeSpent" value="205496000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="1280" y="0" width="1680" height="1050" extended-state="0" />
     <editor active="false" />
     <layout>
       <window_info id="TypeScript" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.3297619" sideWeight="0.49591836" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.17380953" sideWeight="0.49591836" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="8" side_tool="true" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32901296" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
@@ -621,23 +616,49 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/public/dojo/AddComment.js">
+    <entry file="file://$PROJECT_DIR$/public/dojo/templates/post.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="480">
-          <caret line="32" column="0" selection-start-line="32" selection-start-column="0" selection-end-line="32" selection-end-column="0" />
+        <state relative-caret-position="15">
+          <caret line="1" column="63" selection-start-line="1" selection-start-column="63" selection-end-line="1" selection-end-column="63" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/public/dojo/xhrModel.js">
+    <entry file="file://$PROJECT_DIR$/public/dojo/templates/comment.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="135">
-          <caret line="9" column="22" selection-start-line="9" selection-start-column="8" selection-end-line="9" selection-end-column="22" />
+        <state relative-caret-position="150">
+          <caret line="10" column="90" selection-start-line="10" selection-start-column="90" selection-end-line="10" selection-end-column="90" />
+          <folding>
+            <element signature="n#style#0;n#div#0;n#!!top" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/public/dojo/AddComment.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/public/dojo/xhrUtils.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/public/dojo/PostsFeed.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/public/dojo/Parent.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
@@ -669,62 +690,34 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/public/dojo/Utils.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="720">
-          <caret line="48" column="6" selection-start-line="48" selection-start-column="6" selection-end-line="48" selection-end-column="6" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/public/dojo/templates/post.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="15">
-          <caret line="1" column="63" selection-start-line="1" selection-start-column="63" selection-end-line="1" selection-end-column="63" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/public/dojo/templates/comment.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="150">
-          <caret line="10" column="90" selection-start-line="10" selection-start-column="90" selection-end-line="10" selection-end-column="90" />
-          <folding>
-            <element signature="n#style#0;n#div#0;n#!!top" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/public/dojo/Comments.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="585">
-          <caret line="39" column="3" selection-start-line="39" selection-start-column="3" selection-end-line="39" selection-end-column="3" />
+        <state relative-caret-position="0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/public/dojo/Parent.js">
+    <entry file="file://$PROJECT_DIR$/public/dojo/xhrModel.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="555">
-          <caret line="39" column="96" selection-start-line="39" selection-start-column="96" selection-end-line="39" selection-end-column="96" />
-          <folding>
-            <element signature="e#0#44#0" expanded="false" />
-          </folding>
+        <state relative-caret-position="0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/public/dojo/Utils.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/public/dojo/Posts.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="90">
-          <caret line="6" column="14" selection-start-line="6" selection-start-column="4" selection-end-line="6" selection-end-column="14" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/public/dojo/xhrUtils.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="150">
-          <caret line="10" column="8" selection-start-line="10" selection-start-column="8" selection-end-line="10" selection-end-column="8" />
+        <state relative-caret-position="0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding />
         </state>
       </provider>

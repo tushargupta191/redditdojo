@@ -18,7 +18,7 @@ define([
         constructor : function (commentObj) {
             this.commentObj = commentObj;
             this.userId = localStorage.getItem("userId");
-            this.JSONObj = {"commentId": this.commentObj["_id"], "userId": this.userId};
+            this.requestParams = {"commentId": this.commentObj["_id"], "userId": this.userId};
         },
 
         postCreate: function(){
@@ -28,7 +28,7 @@ define([
             this.voteId = "commentVotes";
             this.commentDom = this.nestedComments;
             this.uid = this.commentObj["_id"];
-            xhrUtils.checkVoted(this.JSONObj, "/checkCommentVoted", this.buttonUp, this.buttonDown);
+            xhrUtils.checkVoted(this.requestParams, "/checkCommentVoted", this.buttonUp, this.buttonDown);
         },
 
         populateComments : function(commentObj){

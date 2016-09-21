@@ -1,7 +1,6 @@
 define([
     'dojo/_base/xhr',
-
-], function ( xhr){
+], function (xhr){
 
      return {
 
@@ -37,14 +36,6 @@ define([
                 buttonUp.style.background = this.colorIfVoted;
             }
 
-        },
-
-        getAllComments : function (postId) {
-            return xhr.post({
-                url: "/getComments",
-                postData: JSON.stringify({"id": postId}),
-                headers: {"Content-type": "application/json"},
-            });
         }
     };
 });

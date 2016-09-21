@@ -24,7 +24,7 @@ define([
             var comText = this.newComment.value;
             var commentedById = localStorage.getItem("userId");
             var commentedByName = localStorage.getItem("username");
-            var JSONObj = {
+            var requestParams = {
                 "commentedOn": this.postId,
                 "commentedText": comText,
                 "commentedBy": commentedById,
@@ -32,7 +32,7 @@ define([
             };
 
             if(comText !== ""){
-                this._addComment(JSONObj);
+                this._addComment(requestParams);
             }
         }
     })

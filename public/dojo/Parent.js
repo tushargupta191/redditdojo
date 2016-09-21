@@ -8,8 +8,9 @@ define([
     'dojoFiles/AddComment',
     'dojoFiles/Utils',
     'dojoFiles/xhrUtils',
+    'dojoFiles/xhrModel'
 
-],function (declare , domConstruct ,on, AddComment, Utils , xhrUtils){
+],function (declare , domConstruct ,on, AddComment, Utils , xhrUtils , xhrModel){
 
     return declare(null, {
 
@@ -18,18 +19,19 @@ define([
 
         _incrementVote : function(){
             Utils.manageButtonColor(this.buttonUp, this.buttonDown);
-            xhrUtils.updateVote(this.JSONObj, this.votesElement, this.routeIncrement, this.voteId);
+            xhrUtils.updateVote(this.requestParams, this.votesElement, this.routeIncrement, this.voteId);
         },
 
         _decrementVote : function(){
             Utils.manageButtonColor(this.buttonDown, this.buttonUp);
-            xhrUtils.updateVote(this.JSONObj, this.votesElement, this.routeDecrement, this.voteId);
+            xhrUtils.updateVote(this.requestParams, this.votesElement, this.routeDecrement, this.voteId);
         },
 
         _openComments : function () {
 
             this.commentDom.innerHTML = "";
-            Utils.getAllComments(this.uid).then(function(result){
+
+            xhrModel.xhrPostRequest({"id": this.uid} , '/getComments').then(function(result){
                 var commentObj = JSON.parse(result);
 
                 for(var i=0; i<commentObj.length ; i++){

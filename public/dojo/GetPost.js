@@ -1,10 +1,9 @@
 define([
     "dojo/_base/declare",
-    "dojo/_base/xhr",
     "dojo/dom",
     "dojoFiles/Posts",
     "dojoFiles/xhrModel"
-], function(declare, xhr, dom , Posts , xhrModel){
+], function(declare, dom , Posts , xhrModel){
 
     return declare(null , {
 
