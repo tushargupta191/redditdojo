@@ -6,7 +6,6 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
 var routes = require('./routes/index');
-var newpost = require('./routes/newpost');
 var feed = require('./routes/feed');
 
 var port = process.env.PORT || 3000;
@@ -49,7 +48,6 @@ app.use(passport.session());
 app.use(flash());
 
 app.use('/', routes);
-app.use('/newpost', newpost);
 app.use('/feed', feed);
 
 require('./config/passport')(passport);

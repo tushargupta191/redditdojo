@@ -5,32 +5,62 @@ var mongoose = require('mongoose');
 
 
 router.get('/', isLoggedIn , function(req, res, next) {
-  res.render('index');
+    res.render('index');
 });
 
 router.get('/login', function(req, res, next) {
-  res.render('login.html', { message: req.flash('loginMessage') });
+    res.render('login.html', { message: req.flash('loginMessage') });
 });
 
 router.post('/login', passport.authenticate('local-login', {
     successRedirect: '/feed',
     failureRedirect: '/login',
-    failureFlash: true,
+    failureFlash: true
 }));
 
 router.get('/signup', function(req, res) {
-  res.render('signup.html', { message: req.flash('signupMessage') });
+    res.render('signup.html', { message: req.flash('signupMessage') });
 });
 
 router.post('/signup', passport.authenticate('local-signup', {
     successRedirect: '/feed',
     failureRedirect: '/signup',
-    failureFlash: true,
+    failureFlash: true
 }));
 
+router.get('/newpost', isLogged , function(req,res){
+    res.render('newpost.html', { user: req.user });
+});
+
+router.post('/newpost', function(req,res){
+
+    var postTitle = req.body.postTitle;
+    var postText = req.body.postText;
+    var postedByID = req.user.id;
+    var postedByName = req.user.local.username;
+    var postVotes = 0;
+    var postDate = getdate();
+
+    mongoose.model('Post').create({
+        "postTitle" : postTitle,
+        "postText" : postText,
+        "postedByID" : postedByID,
+        "postedByName" : postedByName,
+        "postVotes" : postVotes,
+        "postDate" : postDate
+    }, function (err) {
+        if (err) {
+            res.send("There was a problem adding the information to the database.");
+        }
+        else {
+            res.redirect("/feed");
+        }
+    });
+});
+
 router.get('/logout', function(req, res) {
-  req.logout();
-  res.redirect('/');
+    req.logout();
+    res.redirect('/');
 });
 
 router.get('/getPosts',function(req,res){
@@ -44,7 +74,7 @@ router.post('/getPost', function(req,res){
     var query = {_id : postId};
 
     mongoose.model('Post').findOne(query, function(err,post){
-       res.json(post);
+        res.json(post);
     });
 });
 
@@ -52,15 +82,33 @@ router.post('/checkPostVoted' , function(req,res){
     var postId = req.body.postId;
     var userId = req.body.userId;
     var query = {'postId' : postId , 'userId' : userId};
-    checkVoted(query , 'PostUserVote' , res);
+    checkVoted('PostUserVote',query,res)
 });
 
 router.post('/checkCommentVoted' , function(req,res){
     var commentId = req.body.commentId;
     var userId = req.body.userId;
     var query = {'commentId' : commentId , 'userId' : userId};
-    checkVoted(query , 'CommentUserVote' , res);
+    checkVoted('CommentUserVote',query,res);
 });
+
+function checkVoted(model , query , res){
+    mongoose.model(model).findOne(query, function(err, result){
+        var val;
+        if(!result){
+            val = 0;
+        }
+        else{
+            if(result.Vote == 1){
+                val = 1;
+            }
+            else if(result.Vote == -1){
+                val = -1;
+            }
+        }
+        res.json(val);
+    });
+}
 
 router.post('/postVoteIncrement', function(req,res){
     updatePostVote(1,-1,req,res);
@@ -69,6 +117,84 @@ router.post('/postVoteIncrement', function(req,res){
 router.post('/postVoteDecrement', function(req,res){
     updatePostVote(-1,1,req,res);
 });
+
+function updatePostVote(a, b, req, res){
+    var postId = req.body.postId;
+    var userId = req.body.userId;
+    var query = { _id : postId};
+    var change = 0;
+    var queryUserPostDatabase = {'postId' : postId , 'userId' : userId};
+
+    mongoose.model('PostUserVote').findOne(queryUserPostDatabase , function (err,result) {
+
+        if(result){
+            if(result.Vote == a){
+                change = b;
+                mongoose.model('PostUserVote').remove(queryUserPostDatabase , function(err){
+                    if(err) throw err;
+                });
+            }
+            else if(result.Vote == b){
+                change = 2*a;
+                result.Vote = a;
+                result.save();
+            }
+
+        }
+        else{
+            change = a;
+            mongoose.model('PostUserVote').create({
+                "userId" : userId,
+                "postId" : postId,
+                "Vote" : a
+            });
+        }
+        mongoose.model('Post').findOne(query , function(err,post){
+
+            post.postVotes = post.postVotes + change;
+            post.save();
+            res.json(post);
+        });
+    });
+}
+
+function updateCommentVote(a , b , req, res){
+    var commentId = req.body.commentId;
+    var userId = req.body.userId;
+    var query = {_id : commentId};
+    var change = 0;
+    var queryUserCommentDatabase = {'commentId' : commentId , 'userId' : userId};
+
+    mongoose.model('CommentUserVote').findOne(queryUserCommentDatabase , function (err,result) {
+        if(result){
+            if(result.Vote == a){
+                change = b;
+                mongoose.model('CommentUserVote').remove(queryUserCommentDatabase , function(err){
+                    if(err) throw err;
+                });
+            }
+            else if(result.Vote == b){
+                change = 2*a;
+                result.Vote = a;
+                result.save();
+            }
+        }
+        else{
+            change = a;
+            mongoose.model('CommentUserVote').create({
+                "userId" : userId,
+                "commentId" : commentId,
+                "Vote" : a
+            });
+        }
+        mongoose.model('Comment').findOne(query , function(err,comment){
+            comment.commentVotes = comment.commentVotes + change;
+            comment.save();
+            res.json(comment);
+        });
+    });
+}
+
 
 router.post('/commentVoteIncrement' , function (req,res) {
     updateCommentVote(1,-1,req,res);
@@ -134,76 +260,15 @@ function getdate(){
     return mm.toString() +'/'+dd.toString()+'/'+yyyy.toString() + ' ' + hour.toString() + ':' + min.toString();
 }
 
-function checkVoted(query , model , res){
-    mongoose.model(model).findOne(query, function(err, result){
-        var val;
-        if(!result){
-            val = 0;
-        }
-        else{
-            if(result.Vote == 1){
-                val = 1;
-            }
-            else if(result.Vote == -1){
-                val = -1;
-            }
-        }
-        res.json(val);
-    });
-}
-
-function updatePostVote(a , b , req, res){
-    var postId = req.body.postId;
-    var userId = req.body.userId;
-    var query = { _id : postId};
-    var queryUserPostDatabase = {'postId' : postId , 'userId' : userId};
-    updateDatabase('PostUserVote' , 'Post' , queryUserPostDatabase , query , a , b , res);
-}
-
-function updateCommentVote(a,b,req,res){
-    var commentId = req.body.commentId;
-    var userId = req.body.userId;
-    var query = {_id : commentId};
-    var queryUserCommentDatabase = {'commentId' : commentId , 'userId' : userId};
-    updateDatabase('CommentUserVote' , 'Comment' , queryUserCommentDatabase , query , a , b , res);
-}
-
-function updateDatabase(UserModel , DomModel , queryUser , queryDom , a , b , res){
-    var changeBy = 0;
-    mongoose.model(UserModel).findOne(queryUser , function (err,result) {
-        if(result){
-            if(result.Vote == a){
-                changeBy = b;
-                mongoose.model(UserModel).remove(queryUser , function(err){
-                    if(err) throw err;
-                });
-            }
-            else if(result.Vote == b){
-                changeBy = a*2;
-                result.Vote = a;
-                result.save();
-            }
-        }
-        else{
-            changeBy = a;
-            mongoose.model(UserModel).create({
-                "userId" : userId,
-                "postId" : postId,
-                "Vote" : a
-            });
-        }
-        mongoose.model(DomModel).findOne(queryDom , function(err,post){
-
-            post.postVotes = post.postVotes + changeBy;
-            post.save();
-            res.json(post);
-        });
-    });
-}
-
 function isLoggedIn(req, res, next) {
-  if (!req.isAuthenticated()) {
+    if (!req.isAuthenticated()) {
         return next();
-  }
-  res.redirect('/feed');
+    }
+    res.redirect('/feed');
+}
+
+function isLogged(req, res, next) {
+    if (req.isAuthenticated())
+        return next();
+    res.redirect('/');
 }

@@ -12,26 +12,22 @@ define([
     'dojoFiles/Comments',
     'dojoFiles/AddComment',
     'dojoFiles/xhrUtils',
-    'dojoFiles/Parent'
+    'dojoFiles/Entity'
 
-],function ( declare , domConstruct, on , _WidgetBase, _TemplatedMixin , template , Utils , Comments ,  AddComment , xhrUtils , Parent ){
+],function ( declare , domConstruct, on , _WidgetBase, _TemplatedMixin , template , Utils , Comments ,  AddComment , xhrUtils , Entity ){
 
-    return declare([_WidgetBase, _TemplatedMixin, Parent], {
+    return declare([_WidgetBase, _TemplatedMixin, Entity], {
 
         templateString : template,
 
-        constructor : function(postObj){
-        },
-
         postCreate: function(){
+            this.entity = "Posts";
             this.requestParams = {"postId": this.postObj["_id"], "userId": this.userId};
             this.votesElement = this.postVotes;
-            this.routeIncrement = "/postVoteIncrement";
-            this.routeDecrement = "/postVoteDecrement";
             this.voteId = "postVotes";
             this.commentDom = this.postComments;
             this.uid = this.postObj["_id"];
-            xhrUtils.checkVoted(this.requestParams, "/checkPostVoted", this.buttonUp, this.buttonDown);
+            xhrUtils.checkVoted(this.requestParams, this.entity, this.buttonUp, this.buttonDown);
         },
 
         _openPost : function(){
@@ -41,8 +37,6 @@ define([
         populateComments : function(commentObj){
             new Comments({commentObj : commentObj}).placeAt(this.commentDom);
         }
-
-
     })
 });
 

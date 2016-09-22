@@ -25,33 +25,64 @@ define([
 
     return {
 
-        updateVote : function(requestParams, votesElement , route , voteId){
-            xhrPostRequest(requestParams , route).then(function(result) {
-                var arr = JSON.parse(result);
-                votesElement.innerHTML = arr[voteId];
-            })
+        incrementVote : function(requestParams, votesElement , entity , voteId){
+            if(entity === "Posts"){
+                xhrPostRequest(requestParams , "/postVoteIncrement").then(function(result) {
+                    var arr = JSON.parse(result);
+                    votesElement.innerHTML = arr[voteId];
+                })
+            }
+            else if(entity === "Comments"){
+                xhrPostRequest(requestParams , "/commentVoteIncrement").then(function(result) {
+                    var arr = JSON.parse(result);
+                    votesElement.innerHTML = arr[voteId];
+                })
+            }
         },
 
-        checkVoted : function(requestParams, route , buttonUp , buttonDown){
-            xhrPostRequest(requestParams , route).then(function(result){
-                Utils.checkVoted(result, buttonUp , buttonDown)
-            });
+        decrementVote : function(requestParams, votesElement , entity , voteId){
+            if(entity === "Posts"){
+                xhrPostRequest(requestParams , "/postVoteDecrement").then(function(result) {
+                    var arr = JSON.parse(result);
+                    votesElement.innerHTML = arr[voteId];
+                })
+            }
+            else if(entity === "Comments"){
+                xhrPostRequest(requestParams , "/commentVoteDecrement").then(function(result) {
+                    var arr = JSON.parse(result);
+                    votesElement.innerHTML = arr[voteId];
+                })
+            }
         },
 
-        addComment : function(paramsObj , onLoad){
-            xhrPostRequest(paramsObj , "/postComment").then(onLoad);
+        checkVoted : function(requestParams, entity , buttonUp , buttonDown){
+            if(entity === "Posts"){
+                xhrPostRequest(requestParams , "/checkPostVoted").then(function(result){
+                    Utils.checkVoted(result, buttonUp , buttonDown)
+                });
+            }
+            else if(entity === "Comments"){
+                xhrPostRequest(requestParams , "/checkCommentVoted").then(function(result){
+                    Utils.checkVoted(result, buttonUp , buttonDown)
+                });
+            }
+
         },
 
-        fetchPosts :  function(onLoad){
-            xhrGetRequest("/getPosts").then(onLoad);
+        addComment : function(paramsObj){
+            return xhrPostRequest(paramsObj , "/postComment");
         },
 
-        getPost : function (requestParams , onLoad){
-            xhrPostRequest(requestParams , "/getPost").then(onLoad);
+        fetchPosts :  function(){
+            return xhrGetRequest("/getPosts");
+        },
+
+        getPost : function (requestParams){
+            return xhrPostRequest(requestParams , "/getPost");
         },
         
-        fetchComments : function (requestParams , onLoad) {
-            xhrPostRequest(requestParams , "/getComments").then(onLoad);
+        fetchComments : function (requestParams) {
+            return xhrPostRequest(requestParams , "/getComments");
         }
     }
 })

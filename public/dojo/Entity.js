@@ -19,19 +19,20 @@ define([
 
         _incrementVote : function(){
             Utils.manageButtonColor(this.buttonUp, this.buttonDown);
-            xhrUtils.updateVote(this.requestParams, this.votesElement, this.routeIncrement, this.voteId);
+            xhrUtils.incrementVote(this.requestParams, this.votesElement, this.entity, this.voteId);
         },
 
         _decrementVote : function(){
             Utils.manageButtonColor(this.buttonDown, this.buttonUp);
-            xhrUtils.updateVote(this.requestParams, this.votesElement, this.routeDecrement, this.voteId);
+            xhrUtils.decrementVote(this.requestParams, this.votesElement, this.entity, this.voteId);
         },
 
         _openComments : function () {
 
+            domConstruct.destroy(this.comment);
             this.commentDom.innerHTML = "";
 
-            xhrUtils.fetchComments({"id": this.uid} , function(result){
+            xhrUtils.fetchComments({"id": this.uid}).then(function(result){
                 var commentObj = JSON.parse(result);
 
                 for(var i=0; i<commentObj.length ; i++){

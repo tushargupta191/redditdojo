@@ -11,11 +11,8 @@ define([
 
         templateString : template,
 
-        constructor : function(paramsObj){
-        },
-
         _addComment : function (paramsObj) {
-            xhrUtils.addComment(paramsObj , this.func);
+            xhrUtils.addComment(paramsObj).then(this.func);
         },
 
         _addNewComment : function(){

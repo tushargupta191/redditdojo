@@ -11,7 +11,7 @@ define([
             var str = window.location.href;
             var res = str.split("=");
 
-            xhrUtils.getPost({ "postId" : res[1] } , function (result) {
+            xhrUtils.getPost({ "postId" : res[1] }).then(function (result) {
                 var postObj = JSON.parse(result);
                 var postElement = dom.byId('post');
                 new Posts({postObj : postObj}).placeAt(postElement);

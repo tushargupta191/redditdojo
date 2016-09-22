@@ -8,25 +8,21 @@ define([
     'dojoFiles/Utils',
     'dojoFiles/AddComment',
     'dojoFiles/xhrUtils',
-    'dojoFiles/Parent'
-], function (declare , domConstruct, on , _WidgetBase, _TemplatedMixin , template , Utils , AddComment , xhrUtils , Parent) {
+    'dojoFiles/Entity'
+], function (declare , domConstruct, on , _WidgetBase, _TemplatedMixin , template , Utils , AddComment , xhrUtils , Entity) {
 
-    return declare("Comments" , [_WidgetBase, _TemplatedMixin, Parent] , {
+    return declare("Comments" , [_WidgetBase, _TemplatedMixin, Entity] , {
 
         templateString : template,
 
-        constructor : function (commentObj) {
-        },
-
         postCreate: function(){
+            this.entity = "Comments";
             this.requestParams = {"commentId": this.commentObj["_id"], "userId": this.userId};
             this.votesElement = this.commentVotes;
-            this.routeIncrement = "/commentVoteIncrement";
-            this.routeDecrement = "/commentVoteDecrement";
             this.voteId = "commentVotes";
             this.commentDom = this.nestedComments;
             this.uid = this.commentObj["_id"];
-            xhrUtils.checkVoted(this.requestParams, "/checkCommentVoted", this.buttonUp, this.buttonDown);
+            xhrUtils.checkVoted(this.requestParams, this.entity , this.buttonUp, this.buttonDown);
         },
 
         populateComments : function(commentObj){

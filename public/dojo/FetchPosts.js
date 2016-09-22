@@ -8,7 +8,7 @@ define([
     return declare(null , {
         _fetchPosts: function () {
 
-            xhrUtils.fetchPosts(function (result) {
+            xhrUtils.fetchPosts().then(function (result) {
                 var postObj = JSON.parse(result);
                 var postElement = dom.byId('posts');
                 for (var i = 0; i < postObj.length; i++) {
