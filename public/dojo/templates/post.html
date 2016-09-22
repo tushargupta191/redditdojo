@@ -1,12 +1,12 @@
 <div>
-    <p style="display:inline" data-dojo-attach-point='postVotes'>${postVotes}</p>
+    <p style="display:inline" data-dojo-attach-point='postVotes'>${postObj.postVotes}</p>
     <p style="display:inline">
         <button style="background-color : rgb(254, 254, 254)" data-dojo-attach-point='buttonUp' data-dojo-attach-event='onclick:_incrementVote'>Up</button>
         <button style="background-color : rgb(254, 254, 254)" data-dojo-attach-point='buttonDown' data-dojo-attach-event='onclick:_decrementVote'>Down</button>
     </p>
-    <p style="margin : 0px" data-dojo-attach-point='postTitle' data-dojo-attach-event='onclick:_openPost'>${postTitle}</p>
-    <p style="font-size: 70% ; margin : 0px"} data-dojo-attach-point='postedBy'>Posted By ${postedByName} on ${postDate}</p>
-    <p style="margin : 0px" data-dojo-attach-point='postText'>${postText}</p>
+    <p style="margin : 0px" data-dojo-attach-point='postTitle' data-dojo-attach-event='onclick:_openPost'>${postObj.postTitle}</p>
+    <p style="font-size: 70% ; margin : 0px"} data-dojo-attach-point='postedBy'>Posted By ${postObj.postedByName} on ${postObj.postDate}</p>
+    <p style="margin : 0px" data-dojo-attach-point='postText'>${postObj.postText}</p>
     <button style="margin : 5px" data-dojo-attach-point='comment' data-dojo-attach-event='onclick:_openComments'>Comments</button>
     <p data-dojo-attach-point='postComments'></p>
     <hr>

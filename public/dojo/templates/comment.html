@@ -2,11 +2,11 @@
     <div>
         <button style="display:inline ; background-color : rgb(254, 254, 254)" data-dojo-attach-point='buttonUp' data-dojo-attach-event='onclick:_incrementVote'>+</button>
         <button style="display:inline ; background-color : rgb(254, 254, 254)" data-dojo-attach-point='buttonDown' data-dojo-attach-event='onclick:_decrementVote'>-</button>
-        <p style="display:inline" data-dojo-attach-point='commentedByName'>${commentedByName}</p>
+        <p style="display:inline" data-dojo-attach-point='commentedByName'>${commentObj.commentedByName}</p>
     </div>
     <div>
-        <p style="display:inline ; padding : 0px 0px 0px 20px" data-dojo-attach-point='commentVotes'>${commentVotes}</p>
-        <p style="display:inline ; padding : 0px 0px 0px 20px" data-dojo-attach-point='commentText'>${commentText}</p>
+        <p style="display:inline ; padding : 0px 0px 0px 20px" data-dojo-attach-point='commentVotes'>${commentObj.commentVotes}</p>
+        <p style="display:inline ; padding : 0px 0px 0px 20px" data-dojo-attach-point='commentText'>${commentObj.commentText}</p>
     </div>
     <button data-dojo-attach-point='comment' data-dojo-attach-event='onclick:_openComments'>Comments</button>
     <p data-dojo-attach-point='nestedComments'></p>

@@ -21,12 +21,10 @@ define([
         templateString : template,
 
         constructor : function(postObj){
-            this.postObj = postObj;
-            this.userId = localStorage.getItem("userId");
-            this.requestParams = {"postId": this.postObj["_id"], "userId": this.userId};
         },
 
         postCreate: function(){
+            this.requestParams = {"postId": this.postObj["_id"], "userId": this.userId};
             this.votesElement = this.postVotes;
             this.routeIncrement = "/postVoteIncrement";
             this.routeDecrement = "/postVoteDecrement";
@@ -41,7 +39,7 @@ define([
         },
 
         populateComments : function(commentObj){
-            new Comments(commentObj).placeAt(this.commentDom);
+            new Comments({commentObj : commentObj}).placeAt(this.commentDom);
         }
 
 

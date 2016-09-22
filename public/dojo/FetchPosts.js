@@ -11,7 +11,7 @@ define([
                 var postObj = JSON.parse(result);
                 var postElement = dom.byId('posts');
                 for (var i = 0; i < postObj.length; i++) {
-                    new Posts(postObj[i]).placeAt(postElement);
+                    new Posts({postObj : postObj[i]}).placeAt(postElement);
                 }
             })
         }

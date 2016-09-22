@@ -16,12 +16,10 @@ define([
         templateString : template,
 
         constructor : function (commentObj) {
-            this.commentObj = commentObj;
-            this.userId = localStorage.getItem("userId");
-            this.requestParams = {"commentId": this.commentObj["_id"], "userId": this.userId};
         },
 
         postCreate: function(){
+            this.requestParams = {"commentId": this.commentObj["_id"], "userId": this.userId};
             this.votesElement = this.commentVotes;
             this.routeIncrement = "/commentVoteIncrement";
             this.routeDecrement = "/commentVoteDecrement";
@@ -32,7 +30,7 @@ define([
         },
 
         populateComments : function(commentObj){
-            new Comments(commentObj).placeAt(this.commentDom);
+            new Comments({commentObj : commentObj}).placeAt(this.commentDom);
         }
 
     })

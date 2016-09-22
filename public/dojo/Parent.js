@@ -15,6 +15,7 @@ define([
     return declare(null, {
 
         constructor : function(){
+            this.userId = localStorage.getItem("userId");
         },
 
         _incrementVote : function(){
