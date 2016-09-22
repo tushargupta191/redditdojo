@@ -52,200 +52,30 @@ router.post('/checkPostVoted' , function(req,res){
     var postId = req.body.postId;
     var userId = req.body.userId;
     var query = {'postId' : postId , 'userId' : userId};
-
-    mongoose.model('PostUserVote').findOne(query, function(err, result){
-
-        var val;
-        if(!result){
-            val = 0;
-        }
-        else{
-            if(result.Vote == 1){
-                val = 1;
-            }
-            else if(result.Vote == -1){
-                val = -1;
-            }
-        }
-        res.json(val);
-    });
-});
-
-router.post('/postVoteIncrement', function(req,res){
-    var postId = req.body.postId;
-    var userId = req.body.userId;
-    var query = { _id : postId};
-    var incrementBy = 0;
-    var queryUserPostDatabase = {'postId' : postId , 'userId' : userId};
-
-    mongoose.model('PostUserVote').findOne(queryUserPostDatabase , function (err,result) {
-
-        if(result){
-            if(result.Vote == 1){
-                incrementBy = -1;
-                mongoose.model('PostUserVote').remove(queryUserPostDatabase , function(err){
-                    if(err) throw err;
-                });
-            }
-            else if(result.Vote == -1){
-                incrementBy = 2;
-                result.Vote = 1;
-                result.save();
-            }
-
-        }
-        else{
-            incrementBy = 1;
-            mongoose.model('PostUserVote').create({
-                "userId" : userId,
-                "postId" : postId,
-                "Vote" : 1
-            });
-        }
-        mongoose.model('Post').findOne(query , function(err,post){
-
-            post.postVotes = post.postVotes + incrementBy;
-            post.save();
-            res.json(post);
-        });
-    });
-});
-
-router.post('/postVoteDecrement', function(req,res){
-
-    var postId = req.body.postId;
-    var userId = req.body.userId;
-    var query = { _id : postId};
-    var queryUserPostDatabase = {'postId' : postId , 'userId' : userId};
-    var decrementBy = 0;
-
-    mongoose.model('PostUserVote').findOne(queryUserPostDatabase , function (err,result) {
-
-        if(result){
-            if(result.Vote == -1){
-                decrementBy = -1;
-                mongoose.model('PostUserVote').remove(queryUserPostDatabase , function(err){
-                    if(err) throw err;
-                });
-            }
-            else if(result.Vote == 1){
-                decrementBy = 2;
-                result.Vote = -1;
-                result.save();
-            }
-        }
-        else{
-            decrementBy = 1;
-            mongoose.model('PostUserVote').create({
-                "userId" : userId,
-                "postId" : postId,
-                "Vote" : -1
-            });
-        }
-        mongoose.model('Post').findOne(query , function(err,post){
-            post.postVotes = post.postVotes - decrementBy;
-            post.save();
-            res.json(post);
-        });
-    });
+    checkVoted(query , 'PostUserVote' , res);
 });
 
 router.post('/checkCommentVoted' , function(req,res){
     var commentId = req.body.commentId;
     var userId = req.body.userId;
     var query = {'commentId' : commentId , 'userId' : userId};
+    checkVoted(query , 'CommentUserVote' , res);
+});
 
-    mongoose.model('CommentUserVote').findOne(query, function(err, result){
-        var val;
-        if(!result){
-            val = 0;
-        }
-        else{
-            if(result.Vote == 1){
-                val = 1;
-            }
-            else if(result.Vote == -1){
-                val = -1;
-            }
-        }
-        res.json(val);
-    });
+router.post('/postVoteIncrement', function(req,res){
+    updatePostVote(1,-1,req,res);
+});
+
+router.post('/postVoteDecrement', function(req,res){
+    updatePostVote(-1,1,req,res);
 });
 
 router.post('/commentVoteIncrement' , function (req,res) {
-
-    var commentId = req.body.commentId;
-    var userId = req.body.userId;
-    var query = {_id : commentId};
-    var incrementBy = 0;
-    var queryUserCommentDatabase = {'commentId' : commentId , 'userId' : userId};
-
-    mongoose.model('CommentUserVote').findOne(queryUserCommentDatabase , function (err,result) {
-        if(result){
-            if(result.Vote == 1){
-                incrementBy = -1;
-                mongoose.model('CommentUserVote').remove(queryUserCommentDatabase , function(err){
-                    if(err) throw err;
-                });
-            }
-            else if(result.Vote == -1){
-                incrementBy = 2;
-                result.Vote = 1;
-                result.save();
-            }
-        }
-        else{
-            incrementBy = 1;
-            mongoose.model('CommentUserVote').create({
-                "userId" : userId,
-                "commentId" : commentId,
-                "Vote" : 1
-            });
-        }
-        mongoose.model('Comment').findOne(query , function(err,comment){
-            comment.commentVotes = comment.commentVotes + incrementBy;
-            comment.save();
-            res.json(comment);
-        });
-    });
+    updateCommentVote(1,-1,req,res);
 });
 
 router.post('/commentVoteDecrement', function(req,res){
-
-    var commentId = req.body.commentId;
-    var userId = req.body.userId;
-    var query = { _id : commentId};
-    var queryUserCommentDatabase = {'commentId' : commentId , 'userId' : userId};
-    var decrementBy = 0;
-
-    mongoose.model('CommentUserVote').findOne(queryUserCommentDatabase , function (err,result) {
-        if(result){
-            if(result.Vote == -1){
-                decrementBy = -1;
-                mongoose.model('CommentUserVote').remove(queryUserCommentDatabase , function(err){
-                    if(err) throw err;
-                });
-            }
-            else if(result.Vote == 1){
-                decrementBy = 2;
-                result.Vote = -1;
-                result.save();
-            }
-        }
-        else{
-            decrementBy = 1;
-            mongoose.model('CommentUserVote').create({
-                "userId" : userId,
-                "commentId" : commentId,
-                "Vote" : -1
-            });
-        }
-        mongoose.model('Comment').findOne(query , function(err,comment){
-            comment.commentVotes = comment.commentVotes - decrementBy;
-            comment.save();
-            res.json(comment);
-        });
-    });
+    updateCommentVote(-1,1,req,res);
 });
 
 router.post('/getComments', function(req, res){
@@ -302,6 +132,73 @@ function getdate(){
     }
 
     return mm.toString() +'/'+dd.toString()+'/'+yyyy.toString() + ' ' + hour.toString() + ':' + min.toString();
+}
+
+function checkVoted(query , model , res){
+    mongoose.model(model).findOne(query, function(err, result){
+        var val;
+        if(!result){
+            val = 0;
+        }
+        else{
+            if(result.Vote == 1){
+                val = 1;
+            }
+            else if(result.Vote == -1){
+                val = -1;
+            }
+        }
+        res.json(val);
+    });
+}
+
+function updatePostVote(a , b , req, res){
+    var postId = req.body.postId;
+    var userId = req.body.userId;
+    var query = { _id : postId};
+    var queryUserPostDatabase = {'postId' : postId , 'userId' : userId};
+    updateDatabase('PostUserVote' , 'Post' , queryUserPostDatabase , query , a , b , res);
+}
+
+function updateCommentVote(a,b,req,res){
+    var commentId = req.body.commentId;
+    var userId = req.body.userId;
+    var query = {_id : commentId};
+    var queryUserCommentDatabase = {'commentId' : commentId , 'userId' : userId};
+    updateDatabase('CommentUserVote' , 'Comment' , queryUserCommentDatabase , query , a , b , res);
+}
+
+function updateDatabase(UserModel , DomModel , queryUser , queryDom , a , b , res){
+    var changeBy = 0;
+    mongoose.model(UserModel).findOne(queryUser , function (err,result) {
+        if(result){
+            if(result.Vote == a){
+                changeBy = b;
+                mongoose.model(UserModel).remove(queryUser , function(err){
+                    if(err) throw err;
+                });
+            }
+            else if(result.Vote == b){
+                changeBy = a*2;
+                result.Vote = a;
+                result.save();
+            }
+        }
+        else{
+            changeBy = a;
+            mongoose.model(UserModel).create({
+                "userId" : userId,
+                "postId" : postId,
+                "Vote" : a
+            });
+        }
+        mongoose.model(DomModel).findOne(queryDom , function(err,post){
+
+            post.postVotes = post.postVotes + changeBy;
+            post.save();
+            res.json(post);
+        });
+    });
 }
 
 function isLoggedIn(req, res, next) {

@@ -4,8 +4,8 @@ define([
     'dijit/_WidgetBase',
     'dijit/_TemplatedMixin',
     'dojo/text!./templates/newComment.html',
-    'dojoFiles/xhrModel'
-], function (declare , xhr , _WidgetBase, _TemplatedMixin , template , xhrModel) {
+    'dojoFiles/xhrUtils'
+], function (declare , xhr , _WidgetBase, _TemplatedMixin , template , xhrUtils) {
 
     return declare([_WidgetBase, _TemplatedMixin] , {
 
@@ -15,9 +15,7 @@ define([
         },
 
         _addComment : function (paramsObj) {
-            xhrModel.xhrPostRequest(paramsObj , "/postComment").then(function(){
-                this.func();
-            }.bind(this))
+            xhrUtils.addComment(paramsObj , this.func);
         },
 
         _addNewComment : function(){

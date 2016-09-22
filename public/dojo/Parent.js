@@ -7,10 +7,9 @@ define([
     'dojo/on',
     'dojoFiles/AddComment',
     'dojoFiles/Utils',
-    'dojoFiles/xhrUtils',
-    'dojoFiles/xhrModel'
+    'dojoFiles/xhrUtils'
 
-],function (declare , domConstruct ,on, AddComment, Utils , xhrUtils , xhrModel){
+],function (declare , domConstruct ,on, AddComment, Utils , xhrUtils){
 
     return declare(null, {
 
@@ -32,7 +31,7 @@ define([
 
             this.commentDom.innerHTML = "";
 
-            xhrModel.xhrPostRequest({"id": this.uid} , '/getComments').then(function(result){
+            xhrUtils.fetchComments({"id": this.uid} , function(result){
                 var commentObj = JSON.parse(result);
 
                 for(var i=0; i<commentObj.length ; i++){

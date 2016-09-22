@@ -2,8 +2,8 @@ define([
     "dojo/_base/declare",
     "dojo/dom",
     "dojoFiles/Posts",
-    "dojoFiles/xhrModel"
-], function(declare, dom , Posts , xhrModel){
+    "dojoFiles/xhrUtils"
+], function(declare, dom , Posts , xhrUtils){
 
     return declare(null , {
 
@@ -11,11 +11,11 @@ define([
             var str = window.location.href;
             var res = str.split("=");
 
-            xhrModel.xhrPostRequest({ "postId" : res[1] } , '/getPost').then(function (result) {
+            xhrUtils.getPost({ "postId" : res[1] } , function (result) {
                 var postObj = JSON.parse(result);
                 var postElement = dom.byId('post');
-                new Posts(postObj).placeAt(postElement);
-            })
+                new Posts({postObj : postObj}).placeAt(postElement);
+            });
         }
     });
 });
